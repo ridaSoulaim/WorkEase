@@ -244,7 +244,7 @@
     <main class="flex-1 overflow-y-auto px-8 py-6">
 
       <!-- ================= VIEW 1: FORMULAIRE DE DEMANDE (DESKTOP GRID) ================= -->
-      <div id="view-nouvelle-demande" class="space-y-6">
+      <div id="view-nouvelle-demande" class="space-y-6 hidden">
         
         <!-- Status Notification Banner -->
         <div id="statusNotification" class="hidden transition-all duration-300 p-4 bg-secondary-container text-on-secondary-container rounded-2xl flex items-center justify-between shadow-sm border border-secondary">
@@ -604,7 +604,7 @@
       </div>
 
       <!-- ================= VIEW 2: DASHBOARD COLLABORATEUR ================= -->
-      <div id="view-dashboard" class="space-y-6 hidden">
+      <div id="view-dashboard" class="space-y-6">
         
         <!-- Top Salutation Banner -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
@@ -1838,6 +1838,8 @@
         profil: "Mon profil"
       };
       document.getElementById('top-breadcrumb-title').textContent = titleMap[tabName] || "Vue d'ensemble";
+      const mainCanvas = document.querySelector('main');
+      if (mainCanvas) mainCanvas.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Leave Type Selector micro-interaction
