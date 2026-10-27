@@ -1,62 +1,48 @@
 # 🌿 WorkEase - Portail RH & Management
 
-Application moderne et intuitive de gestion des congés, des absences et du planning d'équipe pour managers et responsables RH.
-
-![WorkEase Dashboard Preview](https://lh3.googleusercontent.com/aida/AEtjO1XMaXrJLo9KWdQRUwbT-PzvZDV53p6bfQpvTWt3k4nybTvcX1aKC1fSSAEDJ_nCjLWvcd8iuRpapkEj6VJC-dl7MHMMHsExEDWNwcgyZM06H3ljC0rlASDnJENbtMy0sfScV7JUK6e7T_WVwvw-dpXQHwmdNpd_8g0rohviaJ39Qkh6bzjw1SXYgr37fbCxsOLyNfhkfQ0UbJ-syjA2x08zd06tDvNZQ8OfEBsfC73NThlfYuu-V5RY)
+Application web moderne et intuitive de gestion des congés, des absences et du planning d'équipe pour salariés et managers RH.
 
 ---
 
-## ✨ Fonctionnalités principales
+## 🧭 Structure des Pages (Format Desktop)
 
-- **📊 Tableau de bord (Dashboard) :**
-  - Salutation dynamique et indicateurs clés de performance (KPIs) : demandes à valider, absents aujourd'hui, solde d'équipe consommé, taux d'approbation.
-  - Cartes interactives d'approbation rapide (Approuver / Refuser avec micro-interactions et mise à jour en temps réel des compteurs).
-  - Aperçu synthétique du planning hebdomadaire de l'équipe (Présentiel, Télétravail, Congés).
-  - Graphique visuel segmenté des types d'absences du mois (Congés Payés, RTT, Maladie).
+Le projet est désormais scindé en deux espaces dédiés avec une passerelle directe :
 
-- **📝 Gestion des Demandes (Onglet Demandes) :**
-  - Liste complète des demandes d'absence avec badges d'état et types.
-  - Filtrage rapide par type : Toutes, Congés Payés (CP), RTT, Sans Solde.
-  - Recherche instantanée par nom d'employé ou motif.
+1. **[index.html](file:///d:/projects/WorkEase/index.html)** :
+   - Portail d'accueil d'entreprise permettant de sélectionner l'espace de travail.
 
-- **📅 Planning d'équipe (Onglet Planning) :**
-  - Vue matricielle des présences par collaborateur.
-  - Navigation par semaine (Sem. 20, 21, etc.).
-  - Distinctions visuelles : Présentiel (P), Télétravail (TT), Congés Payés (CP).
+2. **[employe.html](file:///d:/projects/WorkEase/employe.html)** :
+   - **Espace Salarié / Collaborateur (Thomas Leroy)** :
+     - Synthèse des soldes disponibles en grille Bento (18.5 CP, 6 RTT, 2 Ancienneté).
+     - Compte à rebours du prochain départ en vacances.
+     - Calendrier mensuel interactif avec alertes d'absences de l'équipe.
+     - Modal de dépôt de nouvelle demande de congé avec estimation de durée.
+     - Suivi et annulation des demandes récentes (Pont de l'Ascension, congés d'été, etc.).
+     - Bouton direct pour basculer vers l'espace RH.
 
-- **👥 Annuaire Équipe (Onglet Équipe) :**
-  - Fiches récapitulatives des collaborateurs directs.
-  - Solde restant de CP et de RTT par personne.
-  - Statut actuel (Présent, Télétravail, etc.).
-
-- **🔔 Notifications & Outils :**
-  - Tiroir de notifications interactif avec badge.
-  - Sélecteur multi-entités / filiales (Acme Corp France, Acme Digital Studio, etc.).
-  - Modale détaillée des motifs et continuités de service.
-  - Messages Toast pour chaque action réalisée.
+3. **[rh.html](file:///d:/projects/WorkEase/rh.html)** :
+   - **Espace Manager & RH (Sophie Laurent)** :
+     - Tableau de bord des arbitrages prioritaires (Approbation / Refus instantané).
+     - Matrice complète de présence hebdomadaire de l'équipe (Présentiel, TT, Congés).
+     - Répartition graphique des types d'absences (CP, RTT, Maladie).
+     - Suivi des quotas conventionnels Syntec et exports paie normalisés DSN.
+     - Bouton direct pour basculer vers l'espace Salarié.
 
 ---
 
-## 🚀 Lancement rapide
+## 🚀 Lancement & Test Local
 
-### Option 1 : Directement dans le navigateur
-Ouvrez simplement le fichier `index.html` dans n'importe quel navigateur web moderne.
-
-### Option 2 : Avec Node.js
 ```bash
-# Lancement d'un serveur local
+# Lancement du serveur local
 npm start
 # ou
 npx serve .
 ```
 
----
-
-## 🛠️ Technologies utilisées
-
-- **HTML5 & Vanilla JavaScript** (Performances optimales, zéro dépendance lourde)
-- **Tailwind CSS** (Design system sur-mesure avec palette de couleurs RH harmonieuse)
-- **Material Symbols Outlined & Google Fonts Inter**
+Ouvrez ensuite l'un des liens dans votre navigateur :
+- **Portail d'accueil** : `http://localhost:3000/index.html`
+- **Espace Salarié** : `http://localhost:3000/employe.html`
+- **Espace Manager RH** : `http://localhost:3000/rh.html`
 
 ---
 

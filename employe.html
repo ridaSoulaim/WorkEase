@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-50">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>WorkEase - Espace Salarié & Gestion des Congés</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#00652c",
+            "primary-container": "#15803d",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#d3ffd5",
+            secondary: "#1f6c3a",
+            "secondary-container": "#a4f1b2",
+            "on-secondary-container": "#24703e",
+            tertiary: "#00652b",
+            "tertiary-container": "#008138",
+            background: "#faf8ff",
+            surface: "#faf8ff",
+            "surface-container": "#eaedff",
+            "surface-container-low": "#f2f3ff",
+            "surface-container-high": "#e2e7ff",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#131b2e",
+            "on-surface-variant": "#3f493f",
+            outline: "#6f7a6e",
+            error: "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a"
+          },
+          fontFamily: {
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .calendar-active-range {
+      background-color: #a4f1b2;
+      color: #24703e;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-900 flex overflow-hidden antialiased">
+
+  <!-- ================= DESKTOP SIDEBAR ================= -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 z-30 transition-all duration-300">
+    <!-- Brand / Logo -->
+    <div class="h-16 px-6 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchNavTab('dashboard')">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-800 to-primary flex items-center justify-center text-white shadow-md shadow-emerald-900/20">
+          <span class="material-symbols-outlined text-[22px]">domain</span>
+        </div>
+        <div>
+          <span class="font-bold text-lg text-slate-900 tracking-tight leading-none">WorkEase</span>
+          <span class="block text-[11px] font-semibold text-primary tracking-wider uppercase mt-0.5">Espace Salarié</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entity / Subsidiary Selector Dropdown -->
+    <div class="px-4 py-3">
+      <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/70 transition-colors cursor-pointer" onclick="toggleSubsidiaryModal()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+            <div class="min-w-0">
+              <span id="sidebar-entity-name" class="block text-xs font-semibold text-slate-800 truncate">Acme Corp France</span>
+              <span class="block text-[10px] text-slate-500">Équipe Tech • Fullstack</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-slate-400 text-sm">unfold_more</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+      <div class="px-3 pt-2 pb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Mon Espace</div>
+      
+      <a href="javascript:void(0)" onclick="switchNavTab('dashboard')" id="nav-btn-dashboard" class="sidebar-nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-all bg-emerald-50 text-primary shadow-sm">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-primary">dashboard</span>
+          <span>Tableau de bord</span>
+        </div>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchNavTab('demandes')" id="nav-btn-demandes" class="sidebar-nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">event_available</span>
+          <span>Mes demandes</span>
+        </div>
+        <span id="badge-nav-pending" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">2</span>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchNavTab('planning')" id="nav-btn-planning" class="sidebar-nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">calendar_month</span>
+          <span>Planning & Équipe</span>
+        </div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchNavTab('documents')" id="nav-btn-documents" class="sidebar-nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">folder_shared</span>
+          <span>Mes documents RH</span>
+        </div>
+      </a>
+
+      <div class="px-3 pt-6 pb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Aide & Règles</div>
+
+      <a href="javascript:void(0)" onclick="openConventionModal()" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">policy</span>
+          <span>Convention SYNTEC</span>
+        </div>
+      </a>
+
+      <a href="rh.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-emerald-800 bg-emerald-100/60 hover:bg-emerald-100 transition-all mt-4 border border-emerald-200">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+          <span>Espace Manager RH (Sophie)</span>
+        </div>
+        <span class="material-symbols-outlined text-xs">arrow_forward</span>
+      </a>
+    </nav>
+
+    <!-- User Profile Badge (Bottom of Sidebar: Thomas Leroy) -->
+    <div class="p-3 border-t border-slate-100">
+      <div class="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors flex items-center justify-between cursor-pointer" onclick="openProfileModal()">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative shrink-0">
+            <img class="w-9 h-9 rounded-full object-cover ring-2 ring-primary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas Leroy"/>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+          </div>
+          <div class="min-w-0">
+            <span class="block text-xs font-semibold text-slate-900 truncate">Thomas Leroy</span>
+            <span class="block text-[11px] text-slate-500 truncate">Lead Développeur Fullstack</span>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-slate-400 text-lg">more_vert</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+
+    <!-- Desktop Top Header Bar -->
+    <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 z-20">
+      <!-- Title & Breadcrumb -->
+      <div class="flex items-center gap-3">
+        <h1 id="page-header-title" class="text-xl font-bold text-slate-900">Espace Collaborateur</h1>
+        <span class="h-4 w-px bg-slate-200 hidden sm:block"></span>
+        <span class="text-xs font-medium text-slate-500 hidden sm:block">Gestion personnelle des congés, RTT et plannings</span>
+      </div>
+
+      <!-- Controls & Primary Action -->
+      <div class="flex items-center gap-4">
+        <!-- Date Badge -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-600">
+          <span class="material-symbols-outlined text-sm text-primary">calendar_today</span>
+          <span>Mardi 27 Octobre 2026</span>
+        </div>
+
+        <!-- Notification Bell -->
+        <button onclick="openNotificationsModal()" class="relative p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <span class="material-symbols-outlined text-[22px]">notifications</span>
+          <span id="notif-badge-count" class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white text-[9px] font-bold flex items-center justify-center">3</span>
+        </button>
+
+        <!-- Primary CTA: Poser un congé -->
+        <button onclick="openRequestModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-secondary text-white text-xs font-semibold shadow-md shadow-primary/20 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-base">add</span>
+          <span>Poser un congé</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Canvas -->
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+
+      <!-- ================= VIEW 1: DASHBOARD ================= -->
+      <div id="view-dashboard" class="space-y-8">
+
+        <!-- Top Salutation & Quick Action Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-4">
+            <div class="relative shrink-0">
+              <img class="w-16 h-16 rounded-2xl object-cover ring-2 ring-primary/20 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
+              <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-slate-900">Bonjour Thomas</h2>
+                <span class="text-2xl animate-bounce">👋</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">
+                Lead Développeur Fullstack • Équipe Tech • Manager : Sophie Laurent
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="openRequestModal()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold shadow-md shadow-primary/20 hover:bg-secondary active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-base">add_circle</span>
+              <span>Poser un congé</span>
+            </button>
+            <button onclick="switchNavTab('demandes')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-all">
+              Historique des demandes
+            </button>
+          </div>
+        </div>
+
+        <!-- Prochain Départ / Countdown Card (Full Width Banner) -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-primary p-6 text-white shadow-lg shadow-emerald-950/10">
+          <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-secondary-container">
+                <span class="material-symbols-outlined text-2xl">flight_takeoff</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-bold text-secondary-container uppercase tracking-wider">Compte à rebours</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold">Approuvée</span>
+                </div>
+                <h3 class="text-xl font-black mt-1">Départ en congés dans 12 jours</h3>
+                <div class="flex items-center gap-3 text-xs text-emerald-100 mt-1">
+                  <span class="flex items-center gap-1 font-semibold text-white">
+                    <span class="material-symbols-outlined text-sm text-secondary-container">date_range</span>
+                    Du 14 au 18 Mai 2025 (5 jours ouvrés)
+                  </span>
+                  <span>•</span>
+                  <span>Validé par Sophie D. (Manager)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="text-right hidden sm:block">
+                <span class="text-[11px] text-emerald-200 block">Période concernée</span>
+                <span class="text-sm font-bold text-white">Semaine 20</span>
+              </div>
+              <button onclick="showToast('Rappel calendrier exporté pour votre départ le 14 Mai.')" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">event</span>
+                <span>Ajouter à mon agenda</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Grid: Synthèse des Soldes Disponibles -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Solde disponible</h3>
+              <p class="text-xs text-slate-500">Compteurs légaux et conventionnels pour la période 2024 / 2025</p>
+            </div>
+            <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Période active</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+            <!-- Card 1: Congés Payés (Main Quota) -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-primary/40 transition-all">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-primary"></span>
+                    <span class="text-xs font-bold text-slate-700">Congés Payés (CP)</span>
+                  </div>
+                  <div class="flex items-baseline gap-1.5 mt-2">
+                    <span class="text-3xl font-black text-slate-900">18.5</span>
+                    <span class="text-xs font-medium text-slate-500">jours restants</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-semibold text-slate-500 block">Acquis : 25 j</span>
+                  <span class="text-xs font-bold text-primary">Pris : 6.5 j</span>
+                </div>
+              </div>
+
+              <!-- Linear Gauge -->
+              <div class="space-y-1.5">
+                <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden flex">
+                  <div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 74%;"></div>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500 font-medium">
+                  <span class="text-primary font-bold">74% disponible</span>
+                  <span>Fin de validité : 31 Mai 2025</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: RTT 2024 -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-secondary/40 transition-all">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-base">schedule</span>
+                    <span class="text-xs font-bold text-slate-700">RTT Forfait Jours</span>
+                  </div>
+                  <div class="flex items-baseline gap-1.5 mt-2">
+                    <span class="text-3xl font-black text-slate-900">6.0</span>
+                    <span class="text-xs font-medium text-slate-500">jours restants</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-semibold text-slate-500 block">Acquis : 10 j</span>
+                  <span class="text-xs font-bold text-secondary">Pris : 4 j</span>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 60%;"></div>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500 font-medium">
+                  <span class="text-secondary font-bold">60% disponible</span>
+                  <span>Pris : 4 sur 10 acquis</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Ancienneté & Total pris -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-tertiary/40 transition-all">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-tertiary text-base">workspace_premium</span>
+                    <span class="text-xs font-bold text-slate-700">Congés d'Ancienneté</span>
+                  </div>
+                  <div class="flex items-baseline gap-1.5 mt-2">
+                    <span class="text-3xl font-black text-slate-900">2.0</span>
+                    <span class="text-xs font-medium text-slate-500">jours restants</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-semibold text-slate-500 block">Convention SYNTEC</span>
+                  <span class="text-xs font-bold text-tertiary">10.5 j posés en 2024</span>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div class="h-full bg-tertiary-container rounded-full" style="width: 100%;"></div>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500 font-medium">
+                  <span class="text-tertiary font-bold">100% disponible</span>
+                  <span>Bonus ancienneté validé</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2-Column Desktop Grid: Left = Mes Demandes / Right = Calendrier & Présence -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+          <!-- Left Column (7 cols): Mes Demandes Récentes -->
+          <div class="lg:col-span-7 space-y-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Mes demandes récentes</h3>
+                  <p class="text-xs text-slate-500">Suivi des demandes en cours d'instruction et passées</p>
+                </div>
+                <button onclick="switchNavTab('demandes')" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  <span>Voir l'historique complet</span>
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              </div>
+
+              <!-- Filter Segmented Chips -->
+              <div class="flex gap-2 overflow-x-auto pb-1" id="filter-container">
+                <button onclick="filterUserRequests('all')" class="filter-btn px-3.5 py-1.5 rounded-full bg-primary text-white text-xs font-bold whitespace-nowrap transition-all shadow-sm" data-filter="all">Toutes (4)</button>
+                <button onclick="filterUserRequests('pending')" class="filter-btn px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold whitespace-nowrap transition-all" data-filter="pending">En attente (2)</button>
+                <button onclick="filterUserRequests('approved')" class="filter-btn px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold whitespace-nowrap transition-all" data-filter="approved">Validées (1)</button>
+                <button onclick="filterUserRequests('rejected')" class="filter-btn px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold whitespace-nowrap transition-all" data-filter="rejected">Refusées (1)</button>
+              </div>
+
+              <!-- List of Cards -->
+              <div class="space-y-3" id="requests-list">
+
+                <!-- Demande 1: RTT Ascension (Pending) -->
+                <div class="request-item bg-slate-50/70 hover:bg-slate-50 rounded-2xl p-4 border border-slate-200/80 transition-all flex flex-col space-y-3" data-status="pending" id="req-card-1">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm">
+                        <span class="material-symbols-outlined text-xl">beach_access</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-slate-900">Pont de l'Ascension</h4>
+                        <p class="text-xs text-slate-500">RTT • 10 Mai 2024 (1 jour)</p>
+                      </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                      En attente
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 text-xs text-slate-500">
+                    <span>Transmis à : <strong>Sophie Laurent</strong> (Manager)</span>
+                    <button onclick="cancelRequest('req-card-1', 'Pont de l\'Ascension')" class="text-red-600 hover:text-red-700 font-semibold hover:underline">Annuler la demande</button>
+                  </div>
+                </div>
+
+                <!-- Demande 2: Congés d'été (Pending) -->
+                <div class="request-item bg-slate-50/70 hover:bg-slate-50 rounded-2xl p-4 border border-slate-200/80 transition-all flex flex-col space-y-3" data-status="pending" id="req-card-2">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-amber-600 shadow-sm">
+                        <span class="material-symbols-outlined text-xl">sunny</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-slate-900">Congés d'été</h4>
+                        <p class="text-xs text-slate-500">CP • 14 - 25 Août (10 jours ouvrés)</p>
+                      </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                      En attente
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 text-xs text-slate-500">
+                    <span>Déposé le 2 Mai • Priorité vacances d'été</span>
+                    <button onclick="cancelRequest('req-card-2', 'Congés d\'été')" class="text-red-600 hover:text-red-700 font-semibold hover:underline">Annuler la demande</button>
+                  </div>
+                </div>
+
+                <!-- Demande 3: Vacances d'hiver (Approved) -->
+                <div class="request-item bg-slate-50/70 hover:bg-slate-50 rounded-2xl p-4 border border-slate-200/80 transition-all flex flex-col space-y-3" data-status="approved">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-secondary-container/60 flex items-center justify-center text-primary shadow-sm">
+                        <span class="material-symbols-outlined text-xl">downhill_skiing</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-slate-900">Vacances d'hiver</h4>
+                        <p class="text-xs text-slate-500">CP • 19 - 23 Fév 2024 (5 jours)</p>
+                      </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                      Approuvée
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 text-xs text-slate-500">
+                    <span>Validé par RH le 12 Janvier</span>
+                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                  </div>
+                </div>
+
+                <!-- Demande 4: Fractionnement (Rejected) -->
+                <div class="request-item bg-slate-50/70 hover:bg-slate-50 rounded-2xl p-4 border border-slate-200/80 transition-all flex flex-col space-y-3" data-status="rejected">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-error-container/60 flex items-center justify-center text-error shadow-sm">
+                        <span class="material-symbols-outlined text-xl">event_busy</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-slate-900">Jour de fractionnement</h4>
+                        <p class="text-xs text-slate-500">CP • 15 Janvier 2024 (1 jour)</p>
+                      </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                      Refusée
+                    </span>
+                  </div>
+                  <div class="rounded-xl bg-red-50 p-2.5 flex items-center gap-2 text-red-900 text-xs">
+                    <span class="material-symbols-outlined text-error text-base shrink-0">info</span>
+                    <span>Motif : Effectif minimum d'astreinte technique non atteint sur cette date.</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (5 cols): Calendrier Interactif & Documents -->
+          <div class="lg:col-span-5 space-y-6">
+
+            <!-- Calendrier Mensuel Interactif -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">calendar_month</span>
+                  <h3 class="text-base font-bold text-slate-900">Mai 2024</h3>
+                </div>
+                <div class="flex items-center gap-1">
+                  <button aria-label="Mois précédent" onclick="showToast('Affichage du mois précédent')" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
+                    <span class="material-symbols-outlined text-base">chevron_left</span>
+                  </button>
+                  <button aria-label="Mois suivant" onclick="showToast('Affichage du mois suivant')" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
+                    <span class="material-symbols-outlined text-base">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Weekday Header -->
+              <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 uppercase">
+                <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span class="text-slate-300">S</span><span class="text-slate-300">D</span>
+              </div>
+
+              <!-- Days Grid -->
+              <div class="grid grid-cols-7 gap-1 text-center text-xs">
+                <span class="py-2 text-slate-300">29</span>
+                <span class="py-2 text-slate-300">30</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">1</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">2</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">3</span>
+                <span class="py-2 text-slate-300 font-medium">4</span>
+                <span class="py-2 text-slate-300 font-medium">5</span>
+                
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">6</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">7</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">8</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">9</span>
+                <!-- 10 Mai: En attente RTT -->
+                <span class="py-2 rounded-lg bg-amber-100 text-amber-900 font-bold relative group cursor-pointer" title="RTT en attente">
+                  10
+                  <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                </span>
+                <span class="py-2 text-slate-300 font-medium">11</span>
+                <span class="py-2 text-slate-300 font-medium">12</span>
+
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">13</span>
+                <!-- 14 to 17: Congés Approuvés (Green Range) -->
+                <span class="py-2 rounded-l-lg calendar-active-range">14</span>
+                <span class="py-2 calendar-active-range">15</span>
+                <span class="py-2 calendar-active-range">16</span>
+                <span class="py-2 rounded-r-lg calendar-active-range">17</span>
+                <span class="py-2 text-slate-300 font-medium">18</span>
+                <span class="py-2 text-slate-300 font-medium">19</span>
+
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">20</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">21</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">22</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">23</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">24</span>
+                <span class="py-2 text-slate-300 font-medium">25</span>
+                <span class="py-2 text-slate-300 font-medium">26</span>
+
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">27</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">28</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">29</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">30</span>
+                <span class="py-2 rounded-lg hover:bg-slate-100 font-medium">31</span>
+                <span class="py-2 text-slate-300">1</span>
+                <span class="py-2 text-slate-300">2</span>
+              </div>
+
+              <!-- Team Sync Widget -->
+              <div class="rounded-xl bg-slate-50 border border-slate-200/70 p-3.5 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2.5">
+                  <span class="material-symbols-outlined text-primary text-lg">groups</span>
+                  <span class="font-medium text-slate-700">2 collègues absents du 14 au 17</span>
+                </div>
+                <div class="flex -space-x-2">
+                  <span class="inline-block h-7 w-7 rounded-full bg-secondary-container text-on-secondary-container font-bold flex items-center justify-center ring-2 ring-white">C</span>
+                  <span class="inline-block h-7 w-7 rounded-full bg-surface-variant text-on-surface font-bold flex items-center justify-center ring-2 ring-white">L</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ressources & Documents Utiles -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <h3 class="text-base font-bold text-slate-900">Ressources & Documents Utiles</h3>
+              <div class="space-y-2">
+                <button onclick="showToast('Téléchargement du récapitulatif annuel 2024 (PDF)...')" class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                      <span class="material-symbols-outlined text-lg">download</span>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-slate-900">Récapitulatif annuel 2024</p>
+                      <p class="text-[11px] text-slate-500">Attestation des congés acquis et pris (PDF)</p>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-400 text-lg group-hover:translate-x-1 transition-transform">chevron_right</span>
+                </button>
+
+                <button onclick="openConventionModal()" class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                      <span class="material-symbols-outlined text-lg">policy</span>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-slate-900">Règles & Convention collective</p>
+                      <p class="text-[11px] text-slate-500">SYNTEC • Règles de pose et délais légaux</p>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-400 text-lg group-hover:translate-x-1 transition-transform">chevron_right</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= VIEW 2: MES DEMANDES (FULL VIEW) ================= -->
+      <div id="view-demandes" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Historique complet de mes demandes</h2>
+              <p class="text-xs text-slate-500">Visualisez et gérez toutes vos demandes d'absence déposées</p>
+            </div>
+            <button onclick="openRequestModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow hover:bg-secondary">
+              <span class="material-symbols-outlined text-sm">add</span>
+              <span>Déposer un congé</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-400 uppercase font-semibold">
+                  <th class="py-3 px-4">Intitulé</th>
+                  <th class="py-3 px-4">Type</th>
+                  <th class="py-3 px-4">Période</th>
+                  <th class="py-3 px-4">Durée</th>
+                  <th class="py-3 px-4">Date de dépôt</th>
+                  <th class="py-3 px-4 text-center">Statut</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 font-bold text-slate-900">Pont de l'Ascension</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">RTT</span></td>
+                  <td class="py-3 px-4 text-slate-700">10 Mai 2024</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">1 jour</td>
+                  <td class="py-3 px-4 text-slate-500">4 Mai 2024</td>
+                  <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold">En attente</span></td>
+                  <td class="py-3 px-4 text-right"><button onclick="showToast('Demande annulée')" class="text-red-600 hover:underline font-semibold">Annuler</button></td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 font-bold text-slate-900">Congés d'été</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200">Congés Payés</span></td>
+                  <td class="py-3 px-4 text-slate-700">14 - 25 Août 2024</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">10 jours</td>
+                  <td class="py-3 px-4 text-slate-500">2 Mai 2024</td>
+                  <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold">En attente</span></td>
+                  <td class="py-3 px-4 text-right"><button onclick="showToast('Demande annulée')" class="text-red-600 hover:underline font-semibold">Annuler</button></td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 font-bold text-slate-900">Vacances d'hiver</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200">Congés Payés</span></td>
+                  <td class="py-3 px-4 text-slate-700">19 - 23 Fév 2024</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">5 jours</td>
+                  <td class="py-3 px-4 text-slate-500">10 Janvier 2024</td>
+                  <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold">Approuvée</span></td>
+                  <td class="py-3 px-4 text-right"><span class="text-slate-400">Archivé</span></td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 font-bold text-slate-900">Jour de fractionnement</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200">Congés Payés</span></td>
+                  <td class="py-3 px-4 text-slate-700">15 Janvier 2024</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">1 jour</td>
+                  <td class="py-3 px-4 text-slate-500">2 Janvier 2024</td>
+                  <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded-full bg-red-100 text-red-800 font-bold">Refusée</span></td>
+                  <td class="py-3 px-4 text-right"><span class="text-slate-400">Archivé</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 3: PLANNING & ÉQUIPE ================= -->
+      <div id="view-planning" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Planning & Présence de l'Équipe Tech</h2>
+              <p class="text-xs text-slate-500">Visualisez les périodes de présence et de congés de vos collègues</p>
+            </div>
+            <span class="px-3 py-1 rounded-lg bg-slate-100 text-xs font-bold text-slate-700">Semaine 20 (Mai 2025)</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Thomas Leroy (Vous)</h4>
+                  <p class="text-xs text-slate-500">Congés Posés du 14 au 18 Mai</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">Congé Validé</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Camille Bernard</h4>
+                  <p class="text-xs text-slate-500">Designer • RTT le 10 Mai</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Télétravail / RTT</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i" alt="Lucas"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Lucas Martin</h4>
+                  <p class="text-xs text-slate-500">Marketing • Présent toute la semaine</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-800">Présent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 4: DOCUMENTS RH ================= -->
+      <div id="view-documents" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Mes Documents RH & Justificatifs</h2>
+            <p class="text-xs text-slate-500">Téléchargez vos attestations de congés et fiches de droits acquis</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-2xl">picture_as_pdf</span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Bilan Congés 2024.pdf</h4>
+                  <p class="text-[11px] text-slate-500">Généré le 31 Décembre 2024 • 142 Ko</p>
+                </div>
+              </div>
+              <button onclick="showToast('Téléchargement en cours...')" class="text-xs font-bold text-primary hover:underline">Télécharger</button>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-2xl">description</span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Charte Télétravail & RTT 2025.pdf</h4>
+                  <p class="text-[11px] text-slate-500">Document légal signé • 310 Ko</p>
+                </div>
+              </div>
+              <button onclick="showToast('Téléchargement en cours...')" class="text-xs font-bold text-primary hover:underline">Télécharger</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================= MODALS & DIALOGS (DESKTOP CENTERED) ================= -->
+
+  <!-- Modal: Poser un congé (Desktop Centered Modal) -->
+  <div id="request-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeRequestModal()">
+    <div class="w-full max-w-lg bg-white rounded-3xl p-7 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-secondary-container flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-xl">edit_calendar</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Nouvelle demande d'absence</h3>
+            <p class="text-xs text-slate-500">Transmise directement à Sophie Laurent pour arbitrage</p>
+          </div>
+        </div>
+        <button onclick="closeRequestModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <!-- Type de congé -->
+      <div class="space-y-1.5">
+        <label class="text-xs font-bold text-slate-700">Type d'absence</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button id="pill-cp" onclick="selectLeaveType('cp')" class="leave-type-pill py-2.5 px-2 text-center rounded-xl bg-primary text-white font-bold text-xs transition-colors" type="button">Congés Payés (CP)</button>
+          <button id="pill-rtt" onclick="selectLeaveType('rtt')" class="leave-type-pill py-2.5 px-2 text-center rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs hover:bg-slate-200 transition-colors" type="button">RTT Employé</button>
+          <button id="pill-autre" onclick="selectLeaveType('autre')" class="leave-type-pill py-2.5 px-2 text-center rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs hover:bg-slate-200 transition-colors" type="button">Autre / Sans Solde</button>
+        </div>
+      </div>
+
+      <!-- Dates Picker Inputs -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700">Date de début</label>
+          <input id="input-date-start" type="date" value="2025-05-20" class="w-full h-11 px-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700">Date de fin</label>
+          <input id="input-date-end" type="date" value="2025-05-24" class="w-full h-11 px-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+        </div>
+      </div>
+
+      <!-- Duration Summary -->
+      <div class="rounded-xl bg-secondary-container/40 border border-secondary-container p-3.5 flex items-center justify-between text-on-secondary-container">
+        <div>
+          <span class="text-xs font-semibold block text-slate-700">Durée estimée :</span>
+          <span class="text-[11px] text-slate-500">Hors week-ends et jours fériés</span>
+        </div>
+        <span class="text-base font-extrabold text-primary">5 jours ouvrés</span>
+      </div>
+
+      <!-- Commentaire / Motif -->
+      <div class="space-y-1">
+        <label class="text-xs font-bold text-slate-700">Message ou motif (facultatif)</label>
+        <input id="input-comment" class="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="Ex : Repos après livraison du sprint Core API" type="text"/>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 flex items-center gap-3">
+        <button onclick="closeRequestModal()" class="w-1/3 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs active:scale-95 transition-all">
+          Annuler
+        </button>
+        <button id="submit-request-btn" onclick="submitNewRequest()" class="w-2/3 h-11 rounded-xl bg-primary hover:bg-secondary text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">send</span>
+          <span>Envoyer la demande</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal: Convention SYNTEC & Règles -->
+  <div id="modal-convention" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeConventionModal()">
+    <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">policy</span>
+          <h3 class="text-base font-bold text-slate-900">Règles & Convention collective SYNTEC</h3>
+        </div>
+        <button onclick="closeConventionModal()" class="text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs text-slate-600 max-h-80 overflow-y-auto">
+        <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+          <span class="font-bold text-slate-900">Délais de prévenance</span>
+          <p>Pour tout congé supérieur à 3 jours consécutifs, un délai minimum de 15 jours avant la date de départ est requis.</p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+          <span class="font-bold text-slate-900">Prise des RTT</span>
+          <p>Les RTT doivent être soldés avant le 31 Décembre de l'année en cours (pas de report possible selon l'accord d'entreprise).</p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+          <span class="font-bold text-slate-900">Congés de fractionnement</span>
+          <p>Un jour de congé supplémentaire est accordé si au moins 3 jours de CP sont pris en dehors de la période légale (1er mai - 31 octobre).</p>
+        </div>
+      </div>
+      <button onclick="closeConventionModal()" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-800 text-xs font-semibold">
+        Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Notifications -->
+  <div id="modal-notifications" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeNotificationsModal()">
+    <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">notifications</span>
+          <h3 class="text-base font-bold text-slate-900">Notifications (3)</h3>
+        </div>
+        <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900">
+          <div class="font-bold">Demande approuvée 🎉</div>
+          <p class="text-[11px] text-emerald-800 mt-0.5">Vos vacances du 14 au 18 Mai ont été validées par Sophie Laurent.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
+          <div class="font-bold">Rappel Pont de l'Ascension</div>
+          <p class="text-[11px] text-slate-500 mt-0.5">Votre demande pour le 10 Mai est en cours d'instruction.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
+          <div class="font-bold">Solde RTT mis à jour</div>
+          <p class="text-[11px] text-slate-500 mt-0.5">Acquisition automatique de 0.83 RTT au titre du mois de Mai.</p>
+        </div>
+      </div>
+      <button onclick="closeNotificationsModal(); showToast('Toutes les notifications sont lues.'); document.getElementById('notif-badge-count').style.display='none';" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold">
+        Marquer tout comme lu
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Switch Subsidiary -->
+  <div id="modal-subsidiary" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) toggleSubsidiaryModal()">
+    <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="text-base font-bold text-slate-900">Changer d'entité</h3>
+        <button onclick="toggleSubsidiaryModal()" class="text-slate-400">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <button onclick="selectSubsidiary('Acme Corp France')" class="w-full p-3 rounded-xl flex items-center justify-between bg-emerald-50 text-emerald-900 font-bold border border-emerald-200">
+          <span>Acme Corp France (Siège)</span>
+          <span class="material-symbols-outlined text-sm text-primary">check</span>
+        </button>
+        <button onclick="selectSubsidiary('Acme Digital Studio')" class="w-full p-3 rounded-xl flex items-center justify-between hover:bg-slate-50 text-slate-700">
+          <span>Acme Digital Studio</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Profile Details -->
+  <div id="modal-profile" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProfileModal()">
+    <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center gap-4 border-b pb-4">
+        <img class="w-14 h-14 rounded-full object-cover ring-4 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas Leroy"/>
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Thomas Leroy</h3>
+          <p class="text-xs text-slate-500">Lead Développeur Fullstack (CDI)</p>
+          <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Contrat Forfait 218 Jours</span>
+        </div>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+          <span class="text-slate-600">Matricule Salarié</span>
+          <span class="font-bold text-slate-900">EMP-2022-084</span>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+          <span class="text-slate-600">Responsable Hiérarchique</span>
+          <span class="font-bold text-primary">Sophie Laurent (Manager RH)</span>
+        </div>
+      </div>
+      <button onclick="closeProfileModal()" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-800 text-xs font-semibold">
+        Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Toast -->
+  <div id="toast" class="fixed bottom-8 right-8 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-medium flex items-center gap-3 opacity-0 pointer-events-none transition-all duration-300 translate-y-2">
+    <span class="material-symbols-outlined text-secondary-container text-lg">check_circle</span>
+    <span id="toast-text">Action effectuée</span>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    let selectedType = 'cp';
+
+    // View Navigation
+    function switchNavTab(tabName) {
+      ['dashboard', 'demandes', 'planning', 'documents'].forEach(t => {
+        const el = document.getElementById(`view-${t}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      const target = document.getElementById(`view-${tabName}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
+        btn.classList.remove('bg-emerald-50', 'text-primary', 'font-semibold', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+        const dot = btn.querySelector('.w-1\\.5');
+        if (dot) dot.remove();
+      });
+
+      const activeBtn = document.getElementById(`nav-btn-${tabName}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-600');
+        activeBtn.classList.add('bg-emerald-50', 'text-primary', 'font-semibold', 'shadow-sm');
+        const dot = document.createElement('span');
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-primary';
+        activeBtn.appendChild(dot);
+      }
+
+      const titleMap = {
+        dashboard: "Espace Collaborateur",
+        demandes: "Mes Demandes d'absence",
+        planning: "Planning & Équipe",
+        documents: "Mes Documents RH"
+      };
+      document.getElementById('page-header-title').textContent = titleMap[tabName] || "Espace Collaborateur";
+    }
+
+    // Modal Request
+    function openRequestModal() {
+      document.getElementById('request-modal').classList.remove('hidden');
+    }
+    function closeRequestModal() {
+      document.getElementById('request-modal').classList.add('hidden');
+    }
+
+    function selectLeaveType(type) {
+      selectedType = type;
+      ['cp', 'rtt', 'autre'].forEach(t => {
+        const btn = document.getElementById(`pill-${t}`);
+        if (btn) {
+          btn.classList.remove('bg-primary', 'text-white', 'font-bold');
+          btn.classList.add('bg-slate-100', 'text-slate-700', 'font-semibold');
+        }
+      });
+      const active = document.getElementById(`pill-${type}`);
+      if (active) {
+        active.classList.remove('bg-slate-100', 'text-slate-700', 'font-semibold');
+        active.classList.add('bg-primary', 'text-white', 'font-bold');
+      }
+    }
+
+    function submitNewRequest() {
+      const btn = document.getElementById('submit-request-btn');
+      btn.innerHTML = '<span class="material-symbols-outlined text-base">check</span> <span>Demande envoyée !</span>';
+      
+      setTimeout(() => {
+        closeRequestModal();
+        btn.innerHTML = '<span class="material-symbols-outlined text-base">send</span> <span>Envoyer la demande</span>';
+        showToast('Votre demande a été transmise à Sophie Laurent avec succès !');
+
+        // Dynamically add card to requests list
+        const list = document.getElementById('requests-list');
+        if (list) {
+          const newCard = document.createElement('div');
+          newCard.className = 'request-item bg-slate-50/70 hover:bg-slate-50 rounded-2xl p-4 border border-emerald-300 transition-all flex flex-col space-y-3';
+          newCard.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-primary shadow-sm">
+                  <span class="material-symbols-outlined text-xl">event_upcoming</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Nouvelle demande</h4>
+                  <p class="text-xs text-slate-500">${selectedType.toUpperCase()} • 20 - 24 Mai (5 jours)</p>
+                </div>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                En attente
+              </span>
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 text-xs text-slate-500">
+              <span>Transmis à : <strong>Sophie Laurent</strong></span>
+              <button onclick="this.closest('.request-item').remove(); showToast('Demande annulée')" class="text-red-600 hover:underline font-semibold">Annuler</button>
+            </div>
+          `;
+          list.prepend(newCard);
+        }
+      }, 600);
+    }
+
+    function cancelRequest(cardId, title) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.opacity = '0.5';
+        setTimeout(() => {
+          card.remove();
+          showToast(`La demande "${title}" a été annulée.`);
+        }, 200);
+      }
+    }
+
+    // Filter requests
+    function filterUserRequests(filter) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-primary', 'text-white', 'font-bold');
+        b.classList.add('bg-slate-100', 'text-slate-700', 'font-semibold');
+      });
+      const activeBtn = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-700', 'font-semibold');
+        activeBtn.classList.add('bg-primary', 'text-white', 'font-bold');
+      }
+
+      document.querySelectorAll('.request-item').forEach(req => {
+        if (filter === 'all' || req.getAttribute('data-status') === filter) {
+          req.classList.remove('hidden');
+        } else {
+          req.classList.add('hidden');
+        }
+      });
+    }
+
+    // Modals
+    function openConventionModal() { document.getElementById('modal-convention').classList.remove('hidden'); }
+    function closeConventionModal() { document.getElementById('modal-convention').classList.add('hidden'); }
+    
+    function openNotificationsModal() { document.getElementById('modal-notifications').classList.remove('hidden'); }
+    function closeNotificationsModal() { document.getElementById('modal-notifications').classList.add('hidden'); }
+
+    function toggleSubsidiaryModal() { document.getElementById('modal-subsidiary').classList.toggle('hidden'); }
+    function selectSubsidiary(name) {
+      document.getElementById('sidebar-entity-name').textContent = name;
+      toggleSubsidiaryModal();
+      showToast(`Entité active : ${name}`);
+    }
+
+    function openProfileModal() { document.getElementById('modal-profile').classList.remove('hidden'); }
+    function closeProfileModal() { document.getElementById('modal-profile').classList.add('hidden'); }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+      }, 3000);
+    }
+
+    function toggleManagerMode() {
+      showToast('Bascule vers l\'espace Manager RH...');
+    }
+  </script>
+</body>
+</html>

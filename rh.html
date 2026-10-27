@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-50">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>WorkEase - Portail RH & Management d'Équipe</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#ecfdf3",
+              100: "#d1fadf",
+              200: "#a6f4c5",
+              300: "#6ce9a6",
+              400: "#32d583",
+              500: "#12b76a",
+              600: "#039855",
+              700: "#027a48",
+              800: "#05603a",
+              900: "#054f31"
+            },
+            surface: {
+              card: "#ffffff",
+              base: "#f8fafc",
+              border: "#e2e8f0"
+            }
+          },
+          fontFamily: {
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .badge-pulse {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.05); }
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-900 flex overflow-hidden antialiased">
+
+  <!-- ================= DESKTOP SIDEBAR ================= -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 z-30 transition-all duration-300">
+    <!-- Brand / Logo -->
+    <div class="h-16 px-6 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('dashboard')">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+          <span class="material-symbols-outlined text-[22px]">domain</span>
+        </div>
+        <div>
+          <span class="font-bold text-lg text-slate-900 tracking-tight leading-none">WorkEase</span>
+          <span class="block text-[11px] font-semibold text-brand-700 tracking-wider uppercase mt-0.5">HR & Manager</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entity / Subsidiary Selector Dropdown -->
+    <div class="px-4 py-3">
+      <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/70 transition-colors cursor-pointer" onclick="openSubsidiaryModal()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+            <div class="min-w-0">
+              <span id="sidebar-entity-name" class="block text-xs font-semibold text-slate-800 truncate">Acme Corp France</span>
+              <span class="block text-[10px] text-slate-500">Siège social • 32 collaborateurs</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-slate-400 text-sm">unfold_more</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+      <div class="px-3 pt-2 pb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Navigation Principale</div>
+      
+      <a href="javascript:void(0)" onclick="switchView('dashboard')" id="nav-dashboard" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-brand-50 text-brand-700 font-semibold shadow-sm">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-brand-600">dashboard</span>
+          <span>Tableau de bord</span>
+        </div>
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchView('demandes')" id="nav-demandes" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">event_available</span>
+          <span>Demandes d'absence</span>
+        </div>
+        <span id="badge-nav-pending" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">6</span>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchView('planning')" id="nav-planning" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">calendar_month</span>
+          <span>Planning & Présence</span>
+        </div>
+        <span class="text-[11px] font-semibold text-slate-400">Sem. 20</span>
+      </a>
+
+      <a href="javascript:void(0)" onclick="switchView('equipe')" id="nav-equipe" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">group</span>
+          <span>Équipe & Soldes</span>
+        </div>
+        <span class="text-[11px] font-semibold text-slate-400">4 pers.</span>
+      </a>
+
+      <div class="px-3 pt-6 pb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Outils & Administration</div>
+
+      <a href="javascript:void(0)" onclick="switchView('rapports')" id="nav-rapports" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-slate-400">bar_chart</span>
+          <span>Rapports & Paie</span>
+        </div>
+      </a>
+
+      <a href="employe.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-emerald-800 bg-emerald-100/60 hover:bg-emerald-100 transition-all mt-4 border border-emerald-200">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">badge</span>
+          <span>Espace Salarié (Thomas)</span>
+        </div>
+        <span class="material-symbols-outlined text-xs">arrow_forward</span>
+      </a>
+    </nav>
+
+    <!-- User Profile Badge (Bottom of Sidebar) -->
+    <div class="p-3 border-t border-slate-100">
+      <div class="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors flex items-center justify-between cursor-pointer" onclick="openProfileModal()">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative shrink-0">
+            <img class="w-9 h-9 rounded-full object-cover ring-2 ring-brand-500/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfs69EYJoYYo0WY_-PfUXD-NZk2vGqbOEE6UvzOOlNJX4jN0YiolpHXoKRqDCsjnUd8BdkJIqreHluG7mYenPbcK3A1HXpZjLaL8s2dSSkvYMdzYrKZvx7BqfZKfKlTfBViiu8mLiF1NK5EyqMMrFmGWoZCRXNHbkCv9TGiBXnfkaDkvS9qAkKlysokP4GCTwOf5QM3rWKsLOe9KygPqmwbPb-i2vtEv_seeFZ2N2dWCLSmRTEuXH" alt="Sophie Laurent"/>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+          </div>
+          <div class="min-w-0">
+            <span class="block text-xs font-semibold text-slate-900 truncate">Sophie Laurent</span>
+            <span class="block text-[11px] text-slate-500 truncate">Responsable RH</span>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-slate-400 text-lg">more_vert</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+
+    <!-- Desktop Top Header Bar -->
+    <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 z-20">
+      <!-- Breadcrumb / Context Title -->
+      <div class="flex items-center gap-3">
+        <h1 id="page-main-title" class="text-xl font-bold text-slate-900">Tableau de bord RH</h1>
+        <span class="h-4 w-px bg-slate-200 hidden sm:block"></span>
+        <span id="page-subtitle" class="text-xs font-medium text-slate-500 hidden sm:block">Vue d'ensemble de l'équipe et arbitrages prioritaires</span>
+      </div>
+
+      <!-- Center / Right Top Controls -->
+      <div class="flex items-center gap-4">
+        <!-- Global Live Search -->
+        <div class="relative w-72">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+          <input id="global-search-bar" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Rechercher collaborateur, congé..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+        </div>
+
+        <!-- Date Indicator -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-600">
+          <span class="material-symbols-outlined text-sm text-brand-600">calendar_today</span>
+          <span>Mardi 27 Octobre 2026</span>
+        </div>
+
+        <!-- Notification Bell -->
+        <button onclick="openNotificationsModal()" class="relative p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <span class="material-symbols-outlined text-[22px]">notifications</span>
+          <span id="header-notif-badge" class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-brand-600 text-white text-[9px] font-bold flex items-center justify-center">3</span>
+        </button>
+
+        <!-- Quick Primary Action -->
+        <button onclick="triggerExportReport()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all active:scale-95">
+          <span class="material-symbols-outlined text-sm">file_download</span>
+          <span>Exporter le rapport</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Canvas -->
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+
+      <!-- ================= VIEW 1: DASHBOARD ================= -->
+      <div id="view-dashboard" class="space-y-8">
+
+        <!-- Welcome Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-900 via-brand-800 to-brand-700 text-white shadow-lg shadow-brand-900/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-white/15 text-[11px] font-semibold text-emerald-200 uppercase tracking-wider backdrop-blur-md">Espace Manager RH</span>
+              <span class="flex items-center gap-1 text-xs text-emerald-100 font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Synchronisation paie active
+              </span>
+            </div>
+            <h2 class="text-2xl font-bold mt-2">Bonjour Sophie 👋</h2>
+            <p class="text-emerald-100 text-sm mt-1 max-w-xl">
+              Vous avez <strong id="banner-pending-count" class="text-white underline font-semibold">6 demandes d'absence en attente</strong> d'arbitrage. 2 nécessitent une réponse rapide pour préserver la planification des sprints.
+            </p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <button onclick="switchView('demandes')" class="px-4 py-2.5 rounded-xl bg-white text-brand-800 hover:bg-emerald-50 text-xs font-semibold shadow transition-all active:scale-95 flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">task_alt</span>
+              <span>Traiter les demandes</span>
+            </button>
+            <button onclick="switchView('planning')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold backdrop-blur transition-all flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">calendar_month</span>
+              <span>Voir le planning</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI 4 Cards Grid (Desktop Optimized 4 Columns) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- KPI 1 -->
+          <div onclick="switchView('demandes')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-500/30 transition-all cursor-pointer group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">À valider</span>
+              <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[11px] font-bold border border-amber-200">2 urgents</span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <div class="text-3xl font-extrabold text-slate-900 group-hover:text-brand-700 transition-colors">
+                <span id="kpi-valider-count">6</span> <span class="text-sm font-medium text-slate-500">demandes</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">pending_actions</span>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-xs text-amber-700 font-medium">
+              <span class="material-symbols-outlined text-sm">alarm</span>
+              <span>Délai moyen de réponse : 4h</span>
+            </div>
+          </div>
+
+          <!-- KPI 2 -->
+          <div onclick="switchView('planning')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-500/30 transition-all cursor-pointer group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Absents aujourd'hui</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <div class="text-3xl font-extrabold text-slate-900">
+                4 <span class="text-sm font-medium text-slate-500">/ 32 actifs</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">person_off</span>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex -space-x-2">
+                <img class="w-6 h-6 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzcmbTmJ0xyjGSO1RuHX9XeVQrQbms-mtcdB89oFRxM0ONDl_xXc8lQeuHdnyrzpdvYK7lKOin_KUdNJg3Y3aMqev2YIAMYpP4tXlPDnnETFT1lT6fNZUq4dnHMgXWrMfQqMmFJfAhjaraGjP6xdx9coBpR61udoOvQPEeBv00njKgt1j9Vsr63Dd7cVvtZtXUbWSr9-aIxj9cSrf7Df5PZxlmsDR75Ie8FhHvRHPuQzhjADRt5hKX" alt="Collaborateur"/>
+                <img class="w-6 h-6 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZOyiqGm_V0xWyhesbyCeUTVA2VqlwZNlqrFgDk1RJxAxTLIIT3zE3dxsA4Z7qlbdZmYEXu4e6SSCQUgtzVVsFsmoSdFJKfZL_af-hPM7wgFeJEbFnlDogB0NjgUZ7tpcC79W1O1KE5k2Dw6H4yBtJ-bJg8am9SnlN6-NH4fCrb0klM3AJlOxbIJLboly252ZtOi25woAxYVsd-_UIIMXe7w0vQgHYSBsndD1a9nEl_-_XbuGfhF_" alt="Collaborateur"/>
+                <img class="w-6 h-6 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzUm253PVJQGNXfV4yA3bvs7IoB3XYeCiFku-wb3dk1dIbdA5gK1FEPCaIEx_GOOeQXG6qJwrOQVzYRyTMsjisaeTGw1qWU5XnwfhUxS1VBt_ujf4PKSfBz_JT8uuLLRhnSIVEAbtPspmfjsOEglhKETeNsA-njtKfU0slEUWJker8gubC7oAnTHYZ1x2ZNVSbcs0O1QidUzr07rbAaIEC5UXSqaPTfc91pKYSjmVy9WuqolzxakJ4" alt="Collaborateur"/>
+                <span class="w-6 h-6 rounded-full ring-2 ring-white bg-slate-100 text-slate-700 text-[10px] font-bold flex items-center justify-center">+1</span>
+              </div>
+              <span class="text-xs text-slate-500 font-medium">2 CP • 2 RTT</span>
+            </div>
+          </div>
+
+          <!-- KPI 3 -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Solde Équipe Consommé</span>
+              <span class="material-symbols-outlined text-brand-600 text-lg">timelapse</span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <div class="text-3xl font-extrabold text-slate-900">68%</div>
+              <span class="text-xs text-slate-500">Objectif S1: 70%</span>
+            </div>
+            <div class="mt-3">
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-brand-600 h-full rounded-full transition-all duration-500" style="width: 68%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 4 -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Taux d'accord</span>
+              <span class="material-symbols-outlined text-emerald-600 text-lg">verified</span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <div class="text-3xl font-extrabold text-slate-900">94%</div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">thumb_up</span>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+              <span class="material-symbols-outlined text-sm">trending_up</span>
+              <span>+3.2% par rapport à M-1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Desktop Layout: Left = Requests + Schedule / Right = Analytics + Policies -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+          <!-- Left Column (8 cols): Priority Requests + Weekly Schedule -->
+          <div class="lg:col-span-8 space-y-8">
+
+            <!-- Priority Requests Panel -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+                    <span class="material-symbols-outlined text-lg">priority_high</span>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900">Demandes à valider en priorité</h3>
+                    <p class="text-xs text-slate-500">Demandes d'arbitrage nécessitant votre validation pour l'équipe Tech & Produit</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="priority-count-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">3 en attente</span>
+                  <button onclick="switchView('demandes')" class="text-xs font-semibold text-brand-700 hover:text-brand-800 flex items-center gap-1">
+                    <span>Voir tout</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- List of Desktop Request Cards -->
+              <div class="divide-y divide-slate-100" id="desktop-requests-container">
+
+                <!-- Card 1: Thomas Leroy -->
+                <div id="d-card-1" class="p-5 hover:bg-slate-50/70 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex items-center gap-4 min-w-0">
+                    <div class="relative shrink-0">
+                      <img class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas Leroy"/>
+                      <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-sm font-bold text-slate-900 truncate">Thomas Leroy</h4>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600">Lead Dev</span>
+                        <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">Congés Payés</span>
+                      </div>
+                      <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                        <span class="flex items-center gap-1 text-slate-700 font-medium">
+                          <span class="material-symbols-outlined text-sm text-brand-600">calendar_today</span>
+                          14 - 18 Mai 2025 (5 jours)
+                        </span>
+                        <span>•</span>
+                        <span class="truncate">Vacances de printemps • Impact sprint faible</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2.5 shrink-0">
+                    <button onclick="openDetailModal('Thomas Leroy', 'Congés Payés', '14 - 18 Mai 2025 (5 jours)', 'Vacances scolaires de printemps. Le projet Core API sera relayé par Lucas Martin.', '21 jours restants')" class="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all">
+                      Détails
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-1', 'refusée')" class="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold transition-all flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">close</span>
+                      <span>Refuser</span>
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-1', 'approuvée')" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+                      <span class="material-symbols-outlined text-sm">check</span>
+                      <span>Approuver</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 2: Camille Bernard -->
+                <div id="d-card-2" class="p-5 hover:bg-slate-50/70 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex items-center gap-4 min-w-0">
+                    <div class="relative shrink-0">
+                      <img class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille Bernard"/>
+                      <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-sm font-bold text-slate-900 truncate">Camille Bernard</h4>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600">Product Designer</span>
+                        <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">RTT</span>
+                      </div>
+                      <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                        <span class="flex items-center gap-1 text-slate-700 font-medium">
+                          <span class="material-symbols-outlined text-sm text-brand-600">event_note</span>
+                          10 Mai 2025 (1 jour)
+                        </span>
+                        <span>•</span>
+                        <span class="truncate">Pont de l'Ascension • Maquettes Figma validées</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2.5 shrink-0">
+                    <button onclick="openDetailModal('Camille Bernard', 'RTT', '10 Mai 2025 (1 jour)', 'Journée de récupération accordée sur le pont de mai. Maquettes Figma finalisées.', '4 jours RTT restants')" class="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all">
+                      Détails
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-2', 'refusée')" class="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold transition-all flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">close</span>
+                      <span>Refuser</span>
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-2', 'approuvée')" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+                      <span class="material-symbols-outlined text-sm">check</span>
+                      <span>Approuver</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 3: Lucas Martin -->
+                <div id="d-card-3" class="p-5 hover:bg-slate-50/70 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex items-center gap-4 min-w-0">
+                    <div class="relative shrink-0">
+                      <img class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i" alt="Lucas Martin"/>
+                      <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-sm font-bold text-slate-900 truncate">Lucas Martin</h4>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600">Growth Marketing</span>
+                        <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200">Sans Solde</span>
+                      </div>
+                      <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                        <span class="flex items-center gap-1 text-slate-700 font-medium">
+                          <span class="material-symbols-outlined text-sm text-brand-600">date_range</span>
+                          02 - 04 Juin 2025 (3 jours)
+                        </span>
+                        <span>•</span>
+                        <span class="truncate">Projet associatif • Remplacement assuré</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2.5 shrink-0">
+                    <button onclick="openDetailModal('Lucas Martin', 'Congé Sans Solde', '02 - 04 Juin 2025 (3 jours)', 'Participation à un séminaire bénévole technologique.', 'Convention signée')" class="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all">
+                      Détails
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-3', 'refusée')" class="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold transition-all flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">close</span>
+                      <span>Refuser</span>
+                    </button>
+                    <button onclick="handleDesktopAction('d-card-3', 'approuvée')" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+                      <span class="material-symbols-outlined text-sm">check</span>
+                      <span>Approuver</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Weekly Schedule Matrix (Desktop Full Width Table) -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Planning de présence de l'équipe</h3>
+                  <p class="text-xs text-slate-500">Semaine 20 • Équipe Produit & Tech (4 collaborateurs)</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                    <button onclick="changeWeek(-1)" class="px-2.5 py-1.5 hover:bg-slate-200 text-slate-600 text-xs font-medium flex items-center">
+                      <span class="material-symbols-outlined text-base">chevron_left</span>
+                    </button>
+                    <span id="desktop-week-label" class="px-3 py-1 text-xs font-bold text-brand-800">Semaine 20</span>
+                    <button onclick="changeWeek(1)" class="px-2.5 py-1.5 hover:bg-slate-200 text-slate-600 text-xs font-medium flex items-center">
+                      <span class="material-symbols-outlined text-base">chevron_right</span>
+                    </button>
+                  </div>
+                  <button onclick="switchView('planning')" class="px-3 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold">
+                    Vue calendrier complet
+                  </button>
+                </div>
+              </div>
+
+              <!-- Schedule Grid -->
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="border-b border-slate-200 text-slate-400 text-xs uppercase font-semibold">
+                      <th class="py-3 px-4 w-52">Membre</th>
+                      <th class="py-3 px-3 text-center">Lun 12</th>
+                      <th class="py-3 px-3 text-center">Mar 13</th>
+                      <th class="py-3 px-3 text-center bg-brand-50/70 text-brand-800 font-bold rounded-t-lg">Mer 14 (Aujourd'hui)</th>
+                      <th class="py-3 px-3 text-center">Jeu 15</th>
+                      <th class="py-3 px-3 text-center">Ven 16</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-xs">
+                    <!-- Row 1: Sophie -->
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                      <td class="py-3 px-4 flex items-center gap-3">
+                        <img class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfs69EYJoYYo0WY_-PfUXD-NZk2vGqbOEE6UvzOOlNJX4jN0YiolpHXoKRqDCsjnUd8BdkJIqreHluG7mYenPbcK3A1HXpZjLaL8s2dSSkvYMdzYrKZvx7BqfZKfKlTfBViiu8mLiF1NK5EyqMMrFmGWoZCRXNHbkCv9TGiBXnfkaDkvS9qAkKlysokP4GCTwOf5QM3rWKsLOe9KygPqmwbPb-i2vtEv_seeFZ2N2dWCLSmRTEuXH" alt="Sophie"/>
+                        <div>
+                          <div class="font-bold text-slate-800">Sophie Laurent</div>
+                          <div class="text-[10px] text-slate-400">Manager RH</div>
+                        </div>
+                      </td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center bg-brand-50/40"><span class="inline-flex px-3 py-1 rounded-md bg-blue-100 text-blue-800 font-bold text-[11px]">Télétravail</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-blue-100 text-blue-800 font-bold text-[11px]">Télétravail</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                    </tr>
+
+                    <!-- Row 2: Thomas -->
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                      <td class="py-3 px-4 flex items-center gap-3">
+                        <img class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
+                        <div>
+                          <div class="font-bold text-slate-800">Thomas Leroy</div>
+                          <div class="text-[10px] text-slate-400">Lead Dev</div>
+                        </div>
+                      </td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center bg-brand-50/40"><span class="inline-flex px-3 py-1 rounded-md bg-amber-100 text-amber-900 font-bold text-[11px]">CP Demandé</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-amber-100 text-amber-900 font-bold text-[11px]">CP Demandé</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-amber-100 text-amber-900 font-bold text-[11px]">CP Demandé</span></td>
+                    </tr>
+
+                    <!-- Row 3: Camille -->
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                      <td class="py-3 px-4 flex items-center gap-3">
+                        <img class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille"/>
+                        <div>
+                          <div class="font-bold text-slate-800">Camille Bernard</div>
+                          <div class="text-[10px] text-slate-400">Designer</div>
+                        </div>
+                      </td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-blue-100 text-blue-800 font-bold text-[11px]">Télétravail</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center bg-brand-50/40"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-blue-100 text-blue-800 font-bold text-[11px]">Télétravail</span></td>
+                    </tr>
+
+                    <!-- Row 4: Lucas -->
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                      <td class="py-3 px-4 flex items-center gap-3">
+                        <img class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i" alt="Lucas"/>
+                        <div>
+                          <div class="font-bold text-slate-800">Lucas Martin</div>
+                          <div class="text-[10px] text-slate-400">Marketing</div>
+                        </div>
+                      </td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center bg-brand-50/40"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-blue-100 text-blue-800 font-bold text-[11px]">Télétravail</span></td>
+                      <td class="p-2 text-center"><span class="inline-flex px-3 py-1 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">Présentiel</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Legend -->
+              <div class="pt-2 flex flex-wrap items-center justify-between text-xs text-slate-500 border-t border-slate-100">
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-100"></span> Présentiel</div>
+                  <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-blue-100"></span> Télétravail</div>
+                  <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-100"></span> Congés Demandés</div>
+                </div>
+                <span class="text-slate-400 text-[11px]">Horaires légaux 35h • Convention Collective Syntec</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column (4 cols): Analytics & HR Shortcuts -->
+          <div class="lg:col-span-4 space-y-8">
+
+            <!-- Breakdown Chart Panel -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Répartition du mois</h3>
+                  <p class="text-xs text-slate-500">Statistiques des absences en Mai 2025</p>
+                </div>
+                <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-xs font-semibold">Mai 2025</span>
+              </div>
+
+              <!-- Segmented Progress Bar -->
+              <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                <div class="bg-brand-600 h-full transition-all" style="width: 62%" title="Congés payés (62%)"></div>
+                <div class="bg-emerald-400 h-full transition-all" style="width: 24%" title="RTT (24%)"></div>
+                <div class="bg-red-400 h-full transition-all" style="width: 14%" title="Maladie (14%)"></div>
+              </div>
+
+              <!-- Detailed Stats Grid -->
+              <div class="space-y-3">
+                <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-brand-600 shrink-0"></span>
+                    <span class="text-xs font-medium text-slate-700">Congés Payés (CP)</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xs font-bold text-slate-900">62%</span>
+                    <span class="block text-[10px] text-slate-400">31 jours posés</span>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 shrink-0"></span>
+                    <span class="text-xs font-medium text-slate-700">RTT Employés</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xs font-bold text-slate-900">24%</span>
+                    <span class="block text-[10px] text-slate-400">12 jours posés</span>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-red-400 shrink-0"></span>
+                    <span class="text-xs font-medium text-slate-700">Arrêts Maladie</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xs font-bold text-slate-900">14%</span>
+                    <span class="block text-[10px] text-slate-400">7 jours justifiés</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming HR Deadlines / Reminders -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span class="material-symbols-outlined text-brand-600 text-lg">event_upcoming</span>
+                <span>Échéances RH importantes</span>
+              </h3>
+              
+              <div class="space-y-3">
+                <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/60 flex items-start gap-3">
+                  <span class="material-symbols-outlined text-amber-700 text-lg shrink-0 mt-0.5">notification_important</span>
+                  <div>
+                    <h5 class="text-xs font-bold text-amber-900">Clôture des Paies de Mai</h5>
+                    <p class="text-[11px] text-amber-700 mt-0.5">Toutes les demandes de congés doivent être validées avant le 25 Mai à 18h00.</p>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-3">
+                  <span class="material-symbols-outlined text-brand-600 text-lg shrink-0 mt-0.5">celebration</span>
+                  <div>
+                    <h5 class="text-xs font-bold text-slate-800">Pont de l'Ascension (10 Mai)</h5>
+                    <p class="text-[11px] text-slate-500 mt-0.5">3 collaborateurs ont posé un RTT ce jour-là. Service client renforcé.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Operational Links -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-3 space-y-1">
+              <button onclick="showToast('Ouverture de l\'historique d\'audit des approbations...')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-medium text-slate-700 group transition-colors">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-base">history</span>
+                  </div>
+                  <div>
+                    <span class="font-bold text-slate-900 block">Historique complet des approbations</span>
+                    <span class="text-[10px] text-slate-400">Archivage légal & traçabilité paie</span>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 group-hover:translate-x-1 transition-transform text-base">chevron_right</span>
+              </button>
+
+              <button onclick="openSettingsModal()" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-medium text-slate-700 group transition-colors">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-base">admin_panel_settings</span>
+                  </div>
+                  <div>
+                    <span class="font-bold text-slate-900 block">Paramètres de politique RH</span>
+                    <span class="text-[10px] text-slate-400">Règles Syntec & quotas annuels</span>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 group-hover:translate-x-1 transition-transform text-base">chevron_right</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= VIEW 2: DEMANDES (ALL REQUESTS) ================= -->
+      <div id="view-demandes" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Gestion des demandes d'absence</h2>
+              <p class="text-xs text-slate-500">Arbitrez, filtrez et exportez toutes les demandes de vos équipes</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="filterDemandesList('all')" class="demandes-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm transition-all" data-filter="all">Toutes (6)</button>
+              <button onclick="filterDemandesList('cp')" class="demandes-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-filter="cp">Congés Payés</button>
+              <button onclick="filterDemandesList('rtt')" class="demandes-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-filter="rtt">RTT</button>
+              <button onclick="filterDemandesList('sans-solde')" class="demandes-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-filter="sans-solde">Sans Solde</button>
+            </div>
+          </div>
+
+          <!-- Table of All Requests -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-400 text-xs uppercase font-semibold">
+                  <th class="py-3 px-4">Collaborateur</th>
+                  <th class="py-3 px-4">Type de congé</th>
+                  <th class="py-3 px-4">Période</th>
+                  <th class="py-3 px-4">Durée</th>
+                  <th class="py-3 px-4">Motif / Impact</th>
+                  <th class="py-3 px-4 text-center">Statut</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-xs" id="table-demandes-body">
+
+                <!-- Row 1: Thomas Leroy -->
+                <tr class="hover:bg-slate-50/70 transition-colors demande-row" data-type="cp" id="t-row-1">
+                  <td class="py-3 px-4 flex items-center gap-3">
+                    <img class="w-9 h-9 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
+                    <div>
+                      <div class="font-bold text-slate-900">Thomas Leroy</div>
+                      <div class="text-[10px] text-slate-400">Lead Développeur</div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">Congés Payés</span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-slate-700">14 - 18 Mai 2025</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">5 jours</td>
+                  <td class="py-3 px-4 text-slate-500 max-w-xs truncate">Vacances de printemps • Core API déléguée</td>
+                  <td class="py-3 px-4 text-center status-col">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">En attente</span>
+                  </td>
+                  <td class="py-3 px-4 text-right actions-col space-x-1">
+                    <button onclick="handleRowAction('t-row-1', 'approuvée')" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Valider</button>
+                    <button onclick="handleRowAction('t-row-1', 'refusée')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold">Refuser</button>
+                  </td>
+                </tr>
+
+                <!-- Row 2: Camille Bernard -->
+                <tr class="hover:bg-slate-50/70 transition-colors demande-row" data-type="rtt" id="t-row-2">
+                  <td class="py-3 px-4 flex items-center gap-3">
+                    <img class="w-9 h-9 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille"/>
+                    <div>
+                      <div class="font-bold text-slate-900">Camille Bernard</div>
+                      <div class="text-[10px] text-slate-400">Product Designer</div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">RTT</span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-slate-700">10 Mai 2025</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">1 jour</td>
+                  <td class="py-3 px-4 text-slate-500 max-w-xs truncate">Pont de l'Ascension • Sprint final</td>
+                  <td class="py-3 px-4 text-center status-col">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">En attente</span>
+                  </td>
+                  <td class="py-3 px-4 text-right actions-col space-x-1">
+                    <button onclick="handleRowAction('t-row-2', 'approuvée')" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Valider</button>
+                    <button onclick="handleRowAction('t-row-2', 'refusée')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold">Refuser</button>
+                  </td>
+                </tr>
+
+                <!-- Row 3: Lucas Martin -->
+                <tr class="hover:bg-slate-50/70 transition-colors demande-row" data-type="sans-solde" id="t-row-3">
+                  <td class="py-3 px-4 flex items-center gap-3">
+                    <img class="w-9 h-9 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i" alt="Lucas"/>
+                    <div>
+                      <div class="font-bold text-slate-900">Lucas Martin</div>
+                      <div class="text-[10px] text-slate-400">Growth Marketing</div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200">Sans Solde</span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-slate-700">02 - 04 Juin 2025</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">3 jours</td>
+                  <td class="py-3 px-4 text-slate-500 max-w-xs truncate">Projet associatif bénévole</td>
+                  <td class="py-3 px-4 text-center status-col">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">En attente</span>
+                  </td>
+                  <td class="py-3 px-4 text-right actions-col space-x-1">
+                    <button onclick="handleRowAction('t-row-3', 'approuvée')" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Valider</button>
+                    <button onclick="handleRowAction('t-row-3', 'refusée')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold">Refuser</button>
+                  </td>
+                </tr>
+
+                <!-- Row 4: Sarah Alami -->
+                <tr class="hover:bg-slate-50/70 transition-colors demande-row" data-type="cp" id="t-row-4">
+                  <td class="py-3 px-4 flex items-center gap-3">
+                    <img class="w-9 h-9 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZOyiqGm_V0xWyhesbyCeUTVA2VqlwZNlqrFgDk1RJxAxTLIIT3zE3dxsA4Z7qlbdZmYEXu4e6SSCQUgtzVVsFsmoSdFJKfZL_af-hPM7wgFeJEbFnlDogB0NjgUZ7tpcC79W1O1KE5k2Dw6H4yBtJ-bJg8am9SnlN6-NH4fCrb0klM3AJlOxbIJLboly252ZtOi25woAxYVsd-_UIIMXe7w0vQgHYSBsndD1a9nEl_-_XbuGfhF_" alt="Sarah"/>
+                    <div>
+                      <div class="font-bold text-slate-900">Sarah Alami</div>
+                      <div class="text-[10px] text-slate-400">Dev Frontend</div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">Congés Payés</span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-slate-700">09 - 13 Juin 2025</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">4 jours</td>
+                  <td class="py-3 px-4 text-slate-500 max-w-xs truncate">Pont de la Pentecôte</td>
+                  <td class="py-3 px-4 text-center status-col">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">En attente</span>
+                  </td>
+                  <td class="py-3 px-4 text-right actions-col space-x-1">
+                    <button onclick="handleRowAction('t-row-4', 'approuvée')" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Valider</button>
+                    <button onclick="handleRowAction('t-row-4', 'refusée')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold">Refuser</button>
+                  </td>
+                </tr>
+
+                <!-- Row 5: Marc Dupuis -->
+                <tr class="hover:bg-slate-50/70 transition-colors demande-row" data-type="rtt" id="t-row-5">
+                  <td class="py-3 px-4 flex items-center gap-3">
+                    <img class="w-9 h-9 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzcmbTmJ0xyjGSO1RuHX9XeVQrQbms-mtcdB89oFRxM0ONDl_xXc8lQeuHdnyrzpdvYK7lKOin_KUdNJg3Y3aMqev2YIAMYpP4tXlPDnnETFT1lT6fNZUq4dnHMgXWrMfQqMmFJfAhjaraGjP6xdx9coBpR61udoOvQPEeBv00njKgt1j9Vsr63Dd7cVvtZtXUbWSr9-aIxj9cSrf7Df5PZxlmsDR75Ie8FhHvRHPuQzhjADRt5hKX" alt="Marc"/>
+                    <div>
+                      <div class="font-bold text-slate-900">Marc Dupuis</div>
+                      <div class="text-[10px] text-slate-400">Dev Backend</div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">RTT</span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-slate-700">23 Mai 2025</td>
+                  <td class="py-3 px-4 font-bold text-slate-900">1 jour</td>
+                  <td class="py-3 px-4 text-slate-500 max-w-xs truncate">Week-end prolongé</td>
+                  <td class="py-3 px-4 text-center status-col">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">En attente</span>
+                  </td>
+                  <td class="py-3 px-4 text-right actions-col space-x-1">
+                    <button onclick="handleRowAction('t-row-5', 'approuvée')" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Valider</button>
+                    <button onclick="handleRowAction('t-row-5', 'refusée')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-semibold">Refuser</button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 3: PLANNING COMPLET ================= -->
+      <div id="view-planning" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Calendrier d'équipe complet</h2>
+              <p class="text-xs text-slate-500">Supervision mensuelle et gestion des équilibres télétravail/présentiel</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-700">Mois en cours : Mai 2025</span>
+              <button onclick="showToast('Export planning synchronisé avec Google Calendar / Outlook.')" class="px-3.5 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">sync</span>
+                <span>Synchroniser iCal</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Big Matrix Grid Preview -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+              <span class="text-xs font-bold text-slate-500 uppercase">Présentiel Moyen</span>
+              <div class="text-2xl font-black text-slate-900 mt-2">64%</div>
+              <p class="text-[11px] text-emerald-700 font-medium mt-1">Conforme à l'accord d'entreprise (min 50%)</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+              <span class="text-xs font-bold text-slate-500 uppercase">Télétravail autorisé</span>
+              <div class="text-2xl font-black text-slate-900 mt-2">2 j / sem</div>
+              <p class="text-[11px] text-slate-500 font-medium mt-1">Charte FlexOffice 2025</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+              <span class="text-xs font-bold text-slate-500 uppercase">Congés posés Mai</span>
+              <div class="text-2xl font-black text-slate-900 mt-2">14 jours</div>
+              <p class="text-[11px] text-slate-500 font-medium mt-1">Répartis sur 4 collaborateurs</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+              <span class="text-xs font-bold text-slate-500 uppercase">Continuité Service</span>
+              <div class="text-2xl font-black text-emerald-600 mt-2">100%</div>
+              <p class="text-[11px] text-emerald-700 font-medium mt-1">Aucun conflit d'astreinte détecté</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 4: ÉQUIPE & SOLDES ================= -->
+      <div id="view-equipe" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Collaborateurs & Soldes de Congés</h2>
+              <p class="text-xs text-slate-500">Consultez les compteurs individuels et l'historique des prises de congés</p>
+            </div>
+            <button onclick="showToast('Rapport des soldes individuels exporté en format Excel / CSV.')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Exporter soldes CSV</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Member 1: Thomas Leroy -->
+            <div class="p-5 rounded-2xl border border-slate-200 bg-white hover:border-brand-500/40 hover:shadow-md transition-all space-y-4">
+              <div class="flex items-center gap-3">
+                <img class="w-14 h-14 rounded-2xl object-cover ring-2 ring-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Thomas Leroy</h4>
+                  <p class="text-xs text-slate-500">Lead Développeur Fullstack</p>
+                  <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Actif • Présent</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde CP restant</span>
+                  <span class="text-base font-extrabold text-brand-700">21 jours</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde RTT</span>
+                  <span class="text-base font-extrabold text-slate-800">6 jours</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Member 2: Camille Bernard -->
+            <div class="p-5 rounded-2xl border border-slate-200 bg-white hover:border-brand-500/40 hover:shadow-md transition-all space-y-4">
+              <div class="flex items-center gap-3">
+                <img class="w-14 h-14 rounded-2xl object-cover ring-2 ring-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Camille Bernard</h4>
+                  <p class="text-xs text-slate-500">Product Designer Lead</p>
+                  <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Télétravail</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde CP restant</span>
+                  <span class="text-base font-extrabold text-brand-700">17 jours</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde RTT</span>
+                  <span class="text-base font-extrabold text-slate-800">4 jours</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Member 3: Lucas Martin -->
+            <div class="p-5 rounded-2xl border border-slate-200 bg-white hover:border-brand-500/40 hover:shadow-md transition-all space-y-4">
+              <div class="flex items-center gap-3">
+                <img class="w-14 h-14 rounded-2xl object-cover ring-2 ring-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i" alt="Lucas"/>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Lucas Martin</h4>
+                  <p class="text-xs text-slate-500">Growth Marketing Lead</p>
+                  <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Actif • Présent</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde CP restant</span>
+                  <span class="text-base font-extrabold text-brand-700">14.5 jours</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                  <span class="text-[11px] text-slate-500 block">Solde RTT</span>
+                  <span class="text-base font-extrabold text-slate-800">3 jours</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 5: RAPPORTS & ANALYTICS ================= -->
+      <div id="view-rapports" class="space-y-6 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Rapports & Indicateurs RH</h2>
+              <p class="text-xs text-slate-500">Générez et téléchargez les états périodiques destinés au service Paie</p>
+            </div>
+            <button onclick="triggerExportReport()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center gap-2 shadow-sm transition-all">
+              <span class="material-symbols-outlined text-sm">print</span>
+              <span>Imprimer l'état mensuel</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+              <h4 class="text-sm font-bold text-slate-900">Rapport d'absentéisme</h4>
+              <p class="text-xs text-slate-500">Taux global de 2.1% en baisse constante grâce à la flexibilité télétravail.</p>
+              <button onclick="showToast('Téléchargement du rapport d\'absentéisme (PDF)')" class="text-xs font-bold text-brand-700 hover:underline pt-2 block">Télécharger PDF &rarr;</button>
+            </div>
+            <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+              <h4 class="text-sm font-bold text-slate-900">État récapitulatif Paie</h4>
+              <p class="text-xs text-slate-500">Fichier normalisé DSN prêt pour l'intégration logicielle (Sage, Lucca, Payfit).</p>
+              <button onclick="showToast('Export DSN généré avec succès.')" class="text-xs font-bold text-brand-700 hover:underline pt-2 block">Générer DSN &rarr;</button>
+            </div>
+            <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+              <h4 class="text-sm font-bold text-slate-900">Audit des validations RH</h4>
+              <p class="text-xs text-slate-500">Traçabilité complète avec horodatage certifié et signatures managers.</p>
+              <button onclick="showToast('Journal d\'audit téléchargé.')" class="text-xs font-bold text-brand-700 hover:underline pt-2 block">Voir le journal &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================= MODALS & DRAWERS (DESKTOP CENTERED) ================= -->
+
+  <!-- Modal: Detail Request -->
+  <div id="modal-detail" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeDetailModal()">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h3 id="modal-detail-title" class="text-lg font-bold text-slate-900">Détails de la demande</h3>
+          <p id="modal-detail-subtitle" class="text-xs text-slate-500">Conformité et arbitrage conventionnel</p>
+        </div>
+        <button onclick="closeDetailModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-50 space-y-1">
+          <span class="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block">Période demandée</span>
+          <span id="modal-detail-period" class="text-sm font-bold text-slate-900"></span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 space-y-1">
+          <span class="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block">Motif & Continuité de service</span>
+          <p id="modal-detail-reason" class="text-slate-700 leading-relaxed"></p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 space-y-1">
+          <span class="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block">Solde après déduction</span>
+          <span id="modal-detail-balance" class="font-bold text-brand-700"></span>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeDetailModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Notifications -->
+  <div id="modal-notifications" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeNotificationsModal()">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-brand-600">notifications</span>
+          <h3 class="text-base font-bold text-slate-900">Notifications (3)</h3>
+        </div>
+        <button onclick="closeNotificationsModal()" class="p-1 text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs max-h-80 overflow-y-auto">
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200/60 flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-700 mt-0.5">priority_high</span>
+          <div>
+            <h5 class="font-bold text-amber-900">Validation urgente requise</h5>
+            <p class="text-slate-600 mt-0.5">Thomas Leroy a posé 5 jours de CP sur la semaine 20.</p>
+          </div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-brand-600 mt-0.5">calendar_month</span>
+          <div>
+            <h5 class="font-bold text-slate-900">Pont de l'Ascension</h5>
+            <p class="text-slate-600 mt-0.5">3 membres de l'équipe seront absents le 10 Mai.</p>
+          </div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-blue-600 mt-0.5">sync</span>
+          <div>
+            <h5 class="font-bold text-slate-900">Clôture des Paies</h5>
+            <p class="text-slate-600 mt-0.5">Toutes les absences du mois doivent être validées avant le 25 Mai.</p>
+          </div>
+        </div>
+      </div>
+      <button onclick="closeNotificationsModal(); showToast('Toutes les notifications sont lues.'); document.getElementById('header-notif-badge').style.display='none';" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold">
+        Marquer tout comme lu
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Entity / Subsidiary -->
+  <div id="modal-subsidiary" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeSubsidiaryModal()">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900">Changer d'entité</h3>
+        <button onclick="closeSubsidiaryModal()" class="text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <button onclick="setSubsidiary('Acme Corp France')" class="w-full p-3 rounded-xl flex items-center justify-between bg-brand-50 border border-brand-200 text-brand-900 font-semibold text-left">
+          <span>Acme Corp France (Siège)</span>
+          <span class="material-symbols-outlined text-brand-600 text-sm">check</span>
+        </button>
+        <button onclick="setSubsidiary('Acme Digital Studio')" class="w-full p-3 rounded-xl flex items-center justify-between hover:bg-slate-50 text-slate-700 font-medium text-left">
+          <span>Acme Digital Studio</span>
+        </button>
+        <button onclick="setSubsidiary('Acme Logistics Nord')" class="w-full p-3 rounded-xl flex items-center justify-between hover:bg-slate-50 text-slate-700 font-medium text-left">
+          <span>Acme Logistics Nord</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Profile & Permissions -->
+  <div id="modal-profile" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProfileModal()">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
+        <img class="w-14 h-14 rounded-full object-cover ring-4 ring-brand-500/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfs69EYJoYYo0WY_-PfUXD-NZk2vGqbOEE6UvzOOlNJX4jN0YiolpHXoKRqDCsjnUd8BdkJIqreHluG7mYenPbcK3A1HXpZjLaL8s2dSSkvYMdzYrKZvx7BqfZKfKlTfBViiu8mLiF1NK5EyqMMrFmGWoZCRXNHbkCv9TGiBXnfkaDkvS9qAkKlysokP4GCTwOf5QM3rWKsLOe9KygPqmwbPb-i2vtEv_seeFZ2N2dWCLSmRTEuXH" alt="Sophie Laurent"/>
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Sophie Laurent</h3>
+          <p class="text-xs text-slate-500">Responsable Ressources Humaines</p>
+          <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Droits d'approbation RH Niveau 2</span>
+        </div>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+          <span class="text-slate-600">Périmètre de validation</span>
+          <span class="font-bold text-slate-900">Tech, Design & Marketing</span>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 flex items-center justify-between">
+          <span class="text-slate-600">Convention Collective</span>
+          <span class="font-bold text-brand-700">Syntec France (IDCC 1486)</span>
+        </div>
+      </div>
+      <button onclick="closeProfileModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold">
+        Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Settings & Quotas -->
+  <div id="modal-settings" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeSettingsModal()">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-brand-600">settings</span>
+          <h3 class="text-base font-bold text-slate-900">Politiques RH & Paramètres Quotas</h3>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 bg-slate-50 rounded-xl space-y-1">
+          <span class="font-bold text-slate-900">Quotas Conventionnels de Base</span>
+          <p class="text-slate-600">Congés Payés : 25 jours ouvrés/an • RTT Forfait Jours : 10 jours/an.</p>
+        </div>
+        <div class="p-3.5 bg-slate-50 rounded-xl space-y-1">
+          <span class="font-bold text-slate-900">Délai minimum de prévenance</span>
+          <p class="text-slate-600">Pour les congés > 3 jours, un préavis de 14 jours est recommandé.</p>
+        </div>
+      </div>
+      <button onclick="closeSettingsModal(); showToast('Paramètres mis à jour.');" class="w-full py-2.5 rounded-xl bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700">
+        Enregistrer les règles
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Toast Notification -->
+  <div id="global-toast" class="fixed bottom-8 right-8 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-medium flex items-center gap-3 opacity-0 pointer-events-none transition-all duration-300 translate-y-2">
+    <span class="material-symbols-outlined text-brand-400 text-lg">check_circle</span>
+    <span id="global-toast-text">Action effectuée</span>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    let pendingRequestsCount = 6;
+    let priorityCount = 3;
+    let currentWeekNumber = 20;
+
+    // View Switching in Desktop Dashboard
+    function switchView(viewName) {
+      // Hide all views
+      ['dashboard', 'demandes', 'planning', 'equipe', 'rapports'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Show targeted view
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.remove('hidden');
+
+      // Update Sidebar Nav Styling
+      document.querySelectorAll('.nav-item').forEach(link => {
+        link.classList.remove('bg-brand-50', 'text-brand-700', 'font-semibold', 'shadow-sm');
+        link.classList.add('text-slate-600');
+        const dot = link.querySelector('.w-1\\.5');
+        if (dot) dot.remove();
+      });
+
+      const activeLink = document.getElementById(`nav-${viewName}`);
+      if (activeLink) {
+        activeLink.classList.remove('text-slate-600');
+        activeLink.classList.add('bg-brand-50', 'text-brand-700', 'font-semibold', 'shadow-sm');
+        const dot = document.createElement('span');
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-brand-600';
+        activeLink.appendChild(dot);
+      }
+
+      // Update Page Headers
+      const titleEl = document.getElementById('page-main-title');
+      const subtitleEl = document.getElementById('page-subtitle');
+      const titles = {
+        dashboard: { title: "Tableau de bord RH", sub: "Vue d'ensemble de l'équipe et arbitrages prioritaires" },
+        demandes: { title: "Demandes d'absence", sub: "Arbitrage des congés payés, RTT et autorisations" },
+        planning: { title: "Planning & Présence", sub: "Supervision des rotations et du télétravail" },
+        equipe: { title: "Équipe & Soldes", sub: "Compteurs des droits acquis et collaborateur direct" },
+        rapports: { title: "Rapports & Paie", sub: "Exports mensuels et conformité légale" }
+      };
+
+      if (titles[viewName]) {
+        if (titleEl) titleEl.textContent = titles[viewName].title;
+        if (subtitleEl) subtitleEl.textContent = titles[viewName].sub;
+      }
+    }
+
+    // Action handling on Desktop Request Cards
+    function handleDesktopAction(cardId, status) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+
+      card.classList.add('opacity-50', 'scale-[0.99]');
+
+      setTimeout(() => {
+        const isApprouve = (status === 'approuvée');
+        card.innerHTML = `
+          <div class="w-full flex items-center justify-between p-2 rounded-xl ${isApprouve ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-red-50 text-red-900 border border-red-200'}">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined ${isApprouve ? 'text-emerald-700' : 'text-red-700'}">
+                ${isApprouve ? 'check_circle' : 'cancel'}
+              </span>
+              <span class="font-bold text-xs">Demande ${status} avec succès</span>
+            </div>
+            <button onclick="removeDesktopCard('${cardId}')" class="text-slate-400 hover:text-slate-700 p-1">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+          </div>
+        `;
+        card.classList.remove('opacity-50', 'scale-[0.99]');
+
+        // Update stats
+        if (pendingRequestsCount > 0) pendingRequestsCount--;
+        if (priorityCount > 0) priorityCount--;
+        updateCounterBadges();
+        showToast(`Demande ${status} avec succès. Collaborateur notifié.`);
+      }, 200);
+    }
+
+    function removeDesktopCard(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) card.remove();
+    }
+
+    // Action handling on Full Table Rows
+    function handleRowAction(rowId, status) {
+      const row = document.getElementById(rowId);
+      if (!row) return;
+
+      const statusCol = row.querySelector('.status-col');
+      const actionsCol = row.querySelector('.actions-col');
+
+      const isApprouve = (status === 'approuvée');
+      if (statusCol) {
+        statusCol.innerHTML = `
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold ${isApprouve ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+            ${isApprouve ? 'Validée' : 'Refusée'}
+          </span>
+        `;
+      }
+      if (actionsCol) {
+        actionsCol.innerHTML = `
+          <span class="text-[11px] text-slate-400 font-medium">Traité</span>
+        `;
+      }
+
+      if (pendingRequestsCount > 0) pendingRequestsCount--;
+      updateCounterBadges();
+      showToast(`Demande ${status} dans la liste générale.`);
+    }
+
+    function updateCounterBadges() {
+      const bNav = document.getElementById('badge-nav-pending');
+      const bBanner = document.getElementById('banner-pending-count');
+      const bValider = document.getElementById('kpi-valider-count');
+      const bPrio = document.getElementById('priority-count-badge');
+
+      if (bNav) bNav.textContent = pendingRequestsCount;
+      if (bBanner) bBanner.textContent = `${pendingRequestsCount} demandes d'absence en attente`;
+      if (bValider) bValider.textContent = pendingRequestsCount;
+      if (bPrio) bPrio.textContent = `${priorityCount} en attente`;
+    }
+
+    // Modals
+    function openDetailModal(name, type, period, reason, balance) {
+      document.getElementById('modal-detail-title').textContent = `${name} • ${type}`;
+      document.getElementById('modal-detail-period').textContent = period;
+      document.getElementById('modal-detail-reason').textContent = reason;
+      document.getElementById('modal-detail-balance').textContent = balance;
+      document.getElementById('modal-detail').classList.remove('hidden');
+    }
+    function closeDetailModal() {
+      document.getElementById('modal-detail').classList.add('hidden');
+    }
+
+    function openNotificationsModal() {
+      document.getElementById('modal-notifications').classList.remove('hidden');
+    }
+    function closeNotificationsModal() {
+      document.getElementById('modal-notifications').classList.add('hidden');
+    }
+
+    function openSubsidiaryModal() {
+      document.getElementById('modal-subsidiary').classList.remove('hidden');
+    }
+    function closeSubsidiaryModal() {
+      document.getElementById('modal-subsidiary').classList.add('hidden');
+    }
+    function setSubsidiary(name) {
+      document.getElementById('sidebar-entity-name').textContent = name;
+      closeSubsidiaryModal();
+      showToast(`Entité active basculée sur : ${name}`);
+    }
+
+    function openProfileModal() {
+      document.getElementById('modal-profile').classList.remove('hidden');
+    }
+    function closeProfileModal() {
+      document.getElementById('modal-profile').classList.add('hidden');
+    }
+
+    function openSettingsModal() {
+      document.getElementById('modal-settings').classList.remove('hidden');
+    }
+    function closeSettingsModal() {
+      document.getElementById('modal-settings').classList.add('hidden');
+    }
+
+    // Toast Notification
+    function showToast(msg) {
+      const toast = document.getElementById('global-toast');
+      const text = document.getElementById('global-toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+      }, 3000);
+    }
+
+    function triggerExportReport() {
+      showToast('Génération du rapport mensuel RH au format PDF & Excel...');
+    }
+
+    // Week Change in Schedule
+    function changeWeek(delta) {
+      currentWeekNumber += delta;
+      document.getElementById('desktop-week-label').textContent = `Semaine ${currentWeekNumber}`;
+      showToast(`Affichage du planning Semaine ${currentWeekNumber}`);
+    }
+
+    // Filter in All Demandes View
+    function filterDemandesList(type) {
+      document.querySelectorAll('.demandes-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      const activeBtn = document.querySelector(`.demandes-filter-btn[data-filter="${type}"]`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+        activeBtn.classList.add('bg-brand-600', 'text-white');
+      }
+
+      document.querySelectorAll('.demande-row').forEach(row => {
+        if (type === 'all' || row.getAttribute('data-type') === type) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+
+    // Global Search
+    function handleGlobalSearch(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('.demande-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(q)) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
