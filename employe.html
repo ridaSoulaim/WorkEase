@@ -786,38 +786,527 @@
 
       <!-- ================= VIEW 4: PLANNING ================= -->
       <div id="view-planning" class="space-y-6 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-5">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-xl font-bold text-slate-900">Planning & Présence de l'Équipe Tech</h2>
-              <p class="text-xs text-slate-500">Visualisez les périodes de présence et de congés de vos collègues</p>
+        <div class="relative w-full">
+          <!-- Ambient decorative blurs -->
+          <div class="absolute -top-12 right-20 w-96 h-96 bg-primary-fixed/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+          <div class="absolute top-48 left-10 w-72 h-72 bg-surface-container-high/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+          <!-- Page Header Section -->
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-2 text-primary text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="uppercase tracking-widest text-[11px]">Calendrier Collaboratif • Équipe Tech & Marketing</span>
+              </div>
+              <h1 class="text-2xl font-black text-on-surface tracking-tight">Planning des absences</h1>
+              <p class="text-xs text-on-surface-variant max-w-2xl">
+                Consultez votre calendrier d'absences, anticipez les ponts et visualisez les disponibilités de l'équipe en temps réel.
+              </p>
             </div>
-            <span class="px-3 py-1 rounded-lg bg-slate-100 text-xs font-bold text-slate-700">Semaine 20 (Mai 2025)</span>
+            <!-- Quick Action: Calendar Sync -->
+            <div class="flex items-center gap-2 self-start md:self-auto">
+              <button class="group flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container-lowest text-on-surface shadow-sm hover:shadow-md transition-all active:scale-[0.98] border border-slate-200/80" id="syncBtn" onclick="handleSyncCalendar()">
+                <span class="material-symbols-outlined text-[18px] text-primary group-hover:rotate-180 transition-transform duration-500">sync</span>
+                <span class="text-xs font-semibold">Synchroniser (Google / Outlook)</span>
+                <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+              </button>
+            </div>
           </div>
 
-          <div class="space-y-3">
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7" alt="Thomas"/>
-                <div>
-                  <h4 class="text-sm font-bold text-slate-900">Thomas Leroy (Vous)</h4>
-                  <p class="text-xs text-slate-500">Congés Posés du 14 au 18 Mai</p>
-                </div>
+          <!-- Toolbar: Date navigator + Views + Toggle Switch -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-4 flex flex-wrap items-center justify-between gap-4 mb-4 border border-slate-200/80">
+            <!-- Period Navigation -->
+            <div class="flex items-center gap-3">
+              <div class="flex items-center bg-surface-container-low rounded-xl p-0.5 border border-slate-200/60">
+                <button aria-label="Mois précédent" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest transition-colors" id="prevMonth" onclick="showToast('Affichage du mois précédent')">
+                  <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                </button>
+                <button class="px-3 h-8 flex items-center justify-center text-xs text-on-surface font-bold hover:bg-surface-container-lowest rounded-lg transition-colors" id="todayBtn" onclick="showToast('Retour à Aujourd\'hui')">
+                  Aujourd'hui
+                </button>
+                <button aria-label="Mois suivant" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest transition-colors" id="nextMonth" onclick="showToast('Affichage du mois suivant')">
+                  <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                </button>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">Congé Validé</span>
+              <div class="flex items-baseline gap-2 pl-1">
+                <span class="text-lg font-bold text-on-surface tracking-tight">Mai 2025</span>
+                <span class="text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">T2 2025</span>
+              </div>
             </div>
 
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA" alt="Camille"/>
-                <div>
-                  <h4 class="text-sm font-bold text-slate-900">Camille Bernard</h4>
-                  <p class="text-xs text-slate-500">Designer • RTT le 10 Mai</p>
-                </div>
+            <!-- Center & Right Controls -->
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- View switch tabs -->
+              <div class="flex items-center bg-surface-container-low p-1 rounded-xl border border-slate-200/60 text-xs">
+                <button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-primary font-bold shadow-sm transition-all">
+                  Mois
+                </button>
+                <button onclick="showToast('Vue Semaine')" class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-medium transition-colors">
+                  Semaine
+                </button>
+                <button onclick="showToast('Vue Chronologie')" class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-medium transition-colors">
+                  Liste / Chronologie
+                </button>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Télétravail / RTT</span>
+
+              <!-- Team visibility switch -->
+              <label class="flex items-center gap-2.5 cursor-pointer select-none bg-surface-container-low/70 hover:bg-surface-container-low px-3.5 py-1.5 rounded-xl transition-colors border border-slate-200/60">
+                <input checked="" class="sr-only peer" id="toggleTeam" type="checkbox" onchange="toggleTeamPresence(this.checked)"/>
+                <span class="w-9 h-5 bg-surface-container-high peer-checked:bg-primary-container rounded-full relative transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-surface-container-lowest after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></span>
+                <span class="text-xs font-semibold text-on-surface">Afficher l'équipe</span>
+                <span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-num text-[10px] font-bold">6</span>
+              </label>
             </div>
           </div>
+
+          <!-- Status Legend Banner -->
+          <div class="bg-surface-container-low/60 border border-slate-200/60 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-1.5 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+              <span class="material-symbols-outlined text-[16px]">info</span>
+              <span>Légende du calendrier</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-xs">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+                <span class="text-on-surface font-medium">Congé approuvé</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#f59e0b]"></span>
+                <span class="text-on-surface font-medium">En attente de validation</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#0284c7]"></span>
+                <span class="text-on-surface font-medium">Jour férié officiel</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#94a3b8]"></span>
+                <span class="text-on-surface-variant">Week-end & repos</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-surface-container-high"></span>
+                <span class="text-on-surface-variant">Absence collègue</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAIN TWO-COLUMN LAYOUT -->
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+            
+            <!-- LEFT: Big Desktop Calendar Grid (Col 1-8 / 9) -->
+            <div class="xl:col-span-8 2xl:col-span-9 flex flex-col bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+              
+              <!-- Day-of-week Headers -->
+              <div class="grid grid-cols-7 bg-surface-container-low text-center py-2.5 border-b border-slate-200/60">
+                <div class="text-xs uppercase tracking-wider font-bold text-on-surface-variant">Lun</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-on-surface-variant">Mar</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-on-surface-variant">Mer</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-on-surface-variant">Jeu</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-on-surface-variant">Ven</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-outline">Sam</div>
+                <div class="text-xs uppercase tracking-wider font-bold text-outline">Dim</div>
+              </div>
+
+              <!-- 5 Calendar Weeks Grid -->
+              <div class="grid grid-cols-7 auto-rows-fr bg-slate-200/70 gap-[1px]">
+                
+                <!-- SEMAINE 1 -->
+                <!-- 28 Apr -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest/70 opacity-40 flex flex-col justify-between">
+                  <span class="text-xs text-on-surface-variant font-mono-num">28</span>
+                </div>
+                <!-- 29 Apr -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest/70 opacity-40 flex flex-col justify-between">
+                  <span class="text-xs text-on-surface-variant font-mono-num">29</span>
+                </div>
+                <!-- 30 Apr -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest/70 opacity-40 flex flex-col justify-between">
+                  <span class="text-xs text-on-surface-variant font-mono-num">30</span>
+                </div>
+                <!-- 1 Mai - Férié -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between relative hover:bg-slate-50 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#0284c7] font-mono-num">1</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0284c7]"></span>
+                  </div>
+                  <div class="flex flex-col gap-1 mt-1">
+                    <div class="bg-[#e0f2fe] text-[#0369a1] rounded-lg px-2 py-1 text-[11px] font-semibold flex items-center gap-1 shadow-sm">
+                      <span class="material-symbols-outlined text-[13px] text-[#0284c7]">celebration</span>
+                      <span class="truncate">Fête du Travail</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 2 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">2</span>
+                  <div class="text-[11px] text-on-surface-variant italic pl-0.5">En poste</div>
+                </div>
+                <!-- 3 Mai (Sam) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">3</span>
+                </div>
+                <!-- 4 Mai (Dim) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">4</span>
+                </div>
+
+                <!-- SEMAINE 2 -->
+                <!-- 5 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">5</span>
+                  <div class="flex items-center gap-1 bg-surface-container-low px-1.5 py-0.5 rounded text-[10px] text-on-surface-variant">
+                    <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    <span class="truncate">Sprint Retro</span>
+                  </div>
+                </div>
+                <!-- 6 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">6</span>
+                </div>
+                <!-- 7 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">7</span>
+                </div>
+                <!-- 8 Mai - Férié -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#0284c7] font-mono-num">8</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0284c7]"></span>
+                  </div>
+                  <div class="flex flex-col gap-1 mt-1">
+                    <div class="bg-[#e0f2fe] text-[#0369a1] rounded-lg px-2 py-1 text-[11px] font-semibold flex items-center gap-1 shadow-sm">
+                      <span class="material-symbols-outlined text-[13px] text-[#0284c7]">flag</span>
+                      <span class="truncate">Victoire 1945</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 9 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">9</span>
+                  <div class="team-presence flex items-center gap-1 bg-surface-container px-1.5 py-0.5 rounded text-[10px] text-on-surface-variant">
+                    <span class="w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] font-bold text-on-secondary-fixed">C</span>
+                    <span class="truncate">Clara D. (TT)</span>
+                  </div>
+                </div>
+                <!-- 10 Mai (Sam) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">10</span>
+                </div>
+                <!-- 11 Mai (Dim) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">11</span>
+                </div>
+
+                <!-- SEMAINE 3 (VACANCES 14-18 MAI) -->
+                <!-- 12 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">12</span>
+                  <div class="text-[11px] text-on-surface-variant pl-0.5">En poste</div>
+                </div>
+                <!-- 13 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">13</span>
+                  <div class="text-[10px] text-primary font-bold pl-0.5">Veille départ</div>
+                </div>
+                <!-- 14 Mai (Début Vacances) -->
+                <div class="min-h-[105px] p-2 bg-[#dcfce7]/60 flex flex-col justify-between relative hover:bg-[#dcfce7]/80 transition-colors border-l-2 border-primary">
+                  <div class="flex items-center justify-between">
+                    <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold shadow-sm font-mono-num">14</span>
+                    <span class="px-1 py-0.5 rounded bg-primary text-white text-[9px] font-bold">J1</span>
+                  </div>
+                  <div class="bg-primary-container text-white rounded-lg px-2 py-1 text-[11px] font-bold flex items-center gap-1 shadow-sm mt-1">
+                    <span class="material-symbols-outlined text-[13px]">flight_takeoff</span>
+                    <span class="truncate">Vacances Printemps</span>
+                  </div>
+                </div>
+                <!-- 15 Mai -->
+                <div class="min-h-[105px] p-2 bg-[#dcfce7]/60 flex flex-col justify-between hover:bg-[#dcfce7]/80 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-primary font-mono-num">15</span>
+                    <span class="px-1 py-0.5 rounded bg-secondary-container text-on-secondary-container text-[9px] font-bold">J2</span>
+                  </div>
+                  <div class="bg-secondary-container text-on-secondary-container rounded-lg px-1.5 py-1 text-[11px] font-semibold truncate">
+                    Thomas L. • CP Approuvé
+                  </div>
+                </div>
+                <!-- 16 Mai -->
+                <div class="min-h-[105px] p-2 bg-[#dcfce7]/60 flex flex-col justify-between hover:bg-[#dcfce7]/80 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-primary font-mono-num">16</span>
+                    <span class="px-1 py-0.5 rounded bg-secondary-container text-on-secondary-container text-[9px] font-bold">J3</span>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <div class="bg-secondary-container text-on-secondary-container rounded px-1.5 py-0.5 text-[10px] font-semibold truncate">
+                      Thomas L. (CP)
+                    </div>
+                    <div class="team-presence flex items-center gap-1 bg-white/90 px-1 py-0.5 rounded text-[10px] text-on-surface shadow-xs">
+                      <span class="w-3.5 h-3.5 rounded-full bg-secondary text-white flex items-center justify-center text-[8px] font-bold">SM</span>
+                      <span class="truncate">Sarah M. (CP)</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 17 Mai (Sam - Vacances) -->
+                <div class="min-h-[105px] p-2 bg-[#dcfce7]/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">17</span>
+                  <div class="text-[10px] text-primary/80 font-bold text-right">Week-end congé</div>
+                </div>
+                <!-- 18 Mai (Dim - Fin Vacances) -->
+                <div class="min-h-[105px] p-2 bg-[#dcfce7]/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">18</span>
+                  <div class="text-[10px] text-primary/80 font-bold text-right">Retour le 19</div>
+                </div>
+
+                <!-- SEMAINE 4 -->
+                <!-- 19 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">19</span>
+                  <div class="text-[11px] text-on-surface-variant pl-0.5">Reprise</div>
+                </div>
+                <!-- 20 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">20</span>
+                </div>
+                <!-- 21 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">21</span>
+                </div>
+                <!-- 22 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">22</span>
+                  <div class="team-presence flex items-center gap-1 bg-surface-container px-1.5 py-0.5 rounded text-[10px] text-on-surface-variant">
+                    <span class="w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] font-bold text-on-secondary-fixed">M</span>
+                    <span class="truncate">Marc B. (RTT)</span>
+                  </div>
+                </div>
+                <!-- 23 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">23</span>
+                </div>
+                <!-- 24 Mai (Sam) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">24</span>
+                </div>
+                <!-- 25 Mai (Dim) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">25</span>
+                </div>
+
+                <!-- SEMAINE 5 (ASCENSION + PONT) -->
+                <!-- 26 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">26</span>
+                </div>
+                <!-- 27 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">27</span>
+                </div>
+                <!-- 28 Mai -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <span class="text-xs font-bold text-on-surface font-mono-num">28</span>
+                </div>
+                <!-- 29 Mai - Ascension Férié -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest flex flex-col justify-between hover:bg-slate-50 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#0284c7] font-mono-num">29</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0284c7]"></span>
+                  </div>
+                  <div class="flex flex-col gap-1 mt-1">
+                    <div class="bg-[#e0f2fe] text-[#0369a1] rounded-lg px-2 py-1 text-[11px] font-semibold flex items-center gap-1 shadow-sm">
+                      <span class="material-symbols-outlined text-[13px] text-[#0284c7]">church</span>
+                      <span class="truncate">Ascension (Férié)</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 30 Mai - Pont en Attente -->
+                <div class="min-h-[105px] p-2 bg-gradient-to-br from-[#fef3c7]/70 to-[#fde68a]/40 flex flex-col justify-between relative hover:shadow-inner transition-colors border-2 border-amber-300 rounded-lg">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-[#b45309] font-mono-num">30</span>
+                    <span class="w-2 h-2 rounded-full bg-[#f59e0b] animate-ping"></span>
+                  </div>
+                  <div class="bg-[#fef3c7] text-[#92400e] rounded-md px-1.5 py-1 text-[11px] font-bold flex items-center gap-1 shadow-sm">
+                    <span class="material-symbols-outlined text-[13px] text-[#f59e0b]">hourglass_empty</span>
+                    <span class="truncate">Pont Ascension (Attente)</span>
+                  </div>
+                </div>
+                <!-- 31 Mai (Sam) -->
+                <div class="min-h-[105px] p-2 bg-surface-container-low/30 flex flex-col justify-between">
+                  <span class="text-xs text-outline font-mono-num">31</span>
+                </div>
+                <!-- 1 Juin -->
+                <div class="min-h-[105px] p-2 bg-surface-container-lowest/70 opacity-40 flex flex-col justify-between">
+                  <span class="text-xs text-on-surface-variant font-mono-num">1</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT: Complementary Widgets (Col 9-12) -->
+            <div class="xl:col-span-4 2xl:col-span-3 flex flex-col gap-5">
+              
+              <!-- WIDGET 1: Prochaines Absences & Countdown Hero Card -->
+              <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-6 flex flex-col gap-4 border border-slate-200/80 relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] uppercase tracking-wider text-on-surface-variant font-bold">Prochain départ</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold">Confirmé</span>
+                </div>
+                
+                <!-- Hero Highlight Card -->
+                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary-container to-secondary p-5 text-white shadow-md">
+                  <div class="absolute -right-4 -bottom-4 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-[20px] text-tertiary-fixed">flight_takeoff</span>
+                    <span class="text-[11px] font-bold text-on-tertiary-container uppercase tracking-wider">Vacances de Printemps</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 my-1">
+                    <span class="text-3xl leading-tight font-black tracking-tight">Dans 12 jours</span>
+                  </div>
+                  <p class="text-xs text-surface-container-high/90 mb-3">
+                    Du Mercredi 14 au Dimanche 18 Mai 2025 • 5 jours calendaires (3j ouvrés)
+                  </p>
+                  <div class="pt-2 flex items-center justify-between border-t border-white/15 text-xs">
+                    <span class="text-surface-container-lowest">Validé par Sophie Laurent (RH)</span>
+                    <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">verified</span>
+                  </div>
+                </div>
+
+                <!-- Second upcoming: Pont Ascension (En attente) -->
+                <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-2 border border-slate-200/60">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span>
+                      <span class="text-xs font-bold text-on-surface">Pont de l'Ascension</span>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full bg-[#fef3c7] text-[#92400e] text-[10px] font-bold">En attente</span>
+                  </div>
+                  <div class="flex items-center justify-between text-on-surface-variant text-xs">
+                    <span>Vendredi 30 Mai 2025</span>
+                    <span class="font-bold text-on-surface">1 jour (RTT)</span>
+                  </div>
+                  <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-[#f59e0b] h-full w-[45%] rounded-full"></div>
+                  </div>
+                  <span class="text-[10px] text-on-surface-variant">En cours d'approbation par le manager (Sophie L.)</span>
+                </div>
+              </div>
+
+              <!-- WIDGET 2: Balance Breakdown (CP & RTT) -->
+              <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-6 flex flex-col gap-4 border border-slate-200/80">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">account_balance_wallet</span>
+                    <h2 class="text-sm font-bold text-on-surface">Soldes disponibles</h2>
+                  </div>
+                  <button onclick="switchNavTab('dashboard')" class="text-xs text-primary hover:underline font-bold">Détails</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <!-- CP Metric -->
+                  <div class="p-3.5 rounded-xl bg-surface-container-low flex flex-col justify-between">
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Congés Payés</span>
+                    <div class="my-1.5">
+                      <span class="text-2xl font-black text-primary font-mono-num">18,5</span>
+                      <span class="text-xs text-on-surface-variant font-medium ml-0.5">j</span>
+                    </div>
+                    <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-primary h-full w-[74%] rounded-full"></div>
+                    </div>
+                    <span class="text-[10px] text-on-surface-variant mt-1">Acquis : 25 j • Pris : 6.5 j</span>
+                  </div>
+
+                  <!-- RTT Metric -->
+                  <div class="p-3.5 rounded-xl bg-surface-container-low flex flex-col justify-between">
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">RTT 2025</span>
+                    <div class="my-1.5">
+                      <span class="text-2xl font-black text-secondary font-mono-num">6,0</span>
+                      <span class="text-xs text-on-surface-variant font-medium ml-0.5">j</span>
+                    </div>
+                    <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-secondary h-full w-[60%] rounded-full"></div>
+                    </div>
+                    <span class="text-[10px] text-on-surface-variant mt-1">Acquis : 10 j • Pris : 4.0 j</span>
+                  </div>
+                </div>
+
+                <!-- Mini Inline SVG Donut Graph -->
+                <div class="p-3 rounded-xl bg-surface-container-low/50 flex items-center justify-between gap-3 border border-slate-200/60">
+                  <div class="flex flex-col">
+                    <span class="text-xs font-bold text-on-surface">Consommation globale</span>
+                    <span class="text-[11px] text-on-surface-variant">Exercice en cours à 58%</span>
+                  </div>
+                  <div class="relative w-11 h-11 shrink-0">
+                    <svg class="w-11 h-11 -rotate-90" viewBox="0 0 36 36">
+                      <path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+                      <path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="58, 100" stroke-linecap="round" stroke-width="4"></path>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center font-mono-num text-[10px] font-bold text-on-surface">58%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- WIDGET 3: Team Capacity & Coverage Monitor -->
+              <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-6 flex flex-col gap-4 border border-slate-200/80">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary text-[20px]">groups</span>
+                    <h2 class="text-sm font-bold text-on-surface">Tension d'équipe</h2>
+                  </div>
+                  <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                </div>
+
+                <!-- Capacity Badge Banner -->
+                <div class="bg-secondary-container/40 p-3.5 rounded-xl flex items-start gap-2.5 border border-secondary-container">
+                  <span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">check_circle</span>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-bold text-on-surface">Capacité Tech & Produit à 75%</span>
+                    <p class="text-[11px] text-on-surface-variant mt-0.5">
+                      Semaine 20 : Quorum d'astreinte garanti. Aucune collision bloquante détectée avec le pôle Backend.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Team Members Micro-List -->
+                <div class="flex flex-col gap-1.5 pt-1">
+                  <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold mb-1">Disponibilités semaine 20</span>
+                  
+                  <div class="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-surface-container-low transition-colors">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-[11px] font-bold">TL</div>
+                      <div class="flex flex-col">
+                        <span class="text-xs font-bold text-on-surface">Thomas Leroy (Vous)</span>
+                        <span class="text-[10px] text-primary font-semibold">CP (14-18 Mai)</span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full bg-[#dcfce7] text-[#15803d] text-[10px] font-bold">Absent</span>
+                  </div>
+
+                  <div class="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-surface-container-low transition-colors">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center text-[11px] font-bold">CB</div>
+                      <div class="flex flex-col">
+                        <span class="text-xs font-bold text-on-surface">Camille Bernard</span>
+                        <span class="text-[10px] text-on-surface-variant">RTT (10 Mai)</span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant text-[10px] font-bold">Partiel</span>
+                  </div>
+
+                  <div class="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-surface-container-low transition-colors">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center text-[11px] font-bold">LM</div>
+                      <div class="flex flex-col">
+                        <span class="text-xs font-bold text-on-surface">Lucas Martin</span>
+                        <span class="text-[10px] text-secondary font-semibold">Télétravail • Actif</span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold">Présent</span>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
       </div>
 
@@ -1069,6 +1558,43 @@
     function closeNotificationsModal() { document.getElementById('modal-notifications').classList.add('hidden'); }
     function toggleSubsidiaryModal() { showToast('Filiale active: Acme Corp France (Siège)'); }
     function openProfileModal() { switchNavTab('profil'); }
+
+    // Calendar sync & team presence handlers
+    function handleSyncCalendar() {
+      const btn = document.getElementById('syncBtn');
+      if (!btn) return;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] text-primary animate-spin">autorenew</span>
+        <span class="text-xs font-semibold text-primary">Synchronisation...</span>
+      `;
+      setTimeout(() => {
+        btn.innerHTML = `
+          <span class="material-symbols-outlined text-[18px] text-primary">check</span>
+          <span class="text-xs font-semibold text-primary">Calendrier synchronisé</span>
+        `;
+        showToast('Synchronisation avec Google Calendar & Outlook réussie.');
+        setTimeout(() => { btn.innerHTML = originalHTML; }, 2500);
+      }, 1000);
+    }
+
+    function toggleTeamPresence(show) {
+      document.querySelectorAll('.team-presence').forEach(el => {
+        el.style.display = show ? 'flex' : 'none';
+      });
+      showToast(show ? 'Affichage des présences de l\'équipe activé' : 'Présences de l\'équipe masquées');
+    }
+
+    // Auto-detect URL hash
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.location.hash === '#planning') {
+        switchNavTab('planning');
+      } else if (window.location.hash === '#demandes') {
+        switchNavTab('demandes');
+      } else if (window.location.hash === '#nouvelle-demande') {
+        switchNavTab('nouvelle-demande');
+      }
+    });
   </script>
 </body>
 </html>
