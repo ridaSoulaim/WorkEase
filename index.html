@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="mobile_tab" name="shell-type"/>
+  <title>WorkEase - Portail RH & Management</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN & Custom Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#005226",
+            "inverse-on-surface": "#eef0ff",
+            "on-error-container": "#93000a",
+            "surface-variant": "#dae2fd",
+            "surface-container-highest": "#dae2fd",
+            "on-primary": "#ffffff",
+            "surface-bright": "#faf8ff",
+            "tertiary": "#00652b",
+            "tertiary-fixed-dim": "#4ae176",
+            "secondary-fixed-dim": "#8bd79b",
+            "inverse-surface": "#283044",
+            "primary-fixed-dim": "#79db8d",
+            "on-secondary-fixed": "#00210b",
+            "surface-container-low": "#f2f3ff",
+            "on-tertiary-container": "#d5ffd5",
+            "surface-container-high": "#e2e7ff",
+            "outline-variant": "#becabc",
+            "on-background": "#131b2e",
+            "on-primary-fixed-variant": "#005323",
+            "inverse-primary": "#79db8d",
+            "secondary-container": "#a4f1b2",
+            "primary-fixed": "#95f8a7",
+            "tertiary-container": "#008138",
+            "on-surface": "#131b2e",
+            "on-tertiary": "#ffffff",
+            "primary": "#00652c",
+            "error": "#ba1a1a",
+            "on-secondary-container": "#24703e",
+            "secondary": "#1f6c3a",
+            "on-primary-fixed": "#00210a",
+            "secondary-fixed": "#a6f4b5",
+            "primary-container": "#15803d",
+            "surface-tint": "#006d30",
+            "error-container": "#ffdad6",
+            "surface-container": "#eaedff",
+            "on-primary-container": "#d3ffd5",
+            "background": "#faf8ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#d2d9f4",
+            "outline": "#6f7a6e",
+            "on-surface-variant": "#3f493f",
+            "surface": "#faf8ff",
+            "on-tertiary-fixed-variant": "#005321",
+            "tertiary-fixed": "#6bff8f",
+            "on-tertiary-fixed": "#002109",
+            "on-error": "#ffffff"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "2rem",
+            "space-md": "1rem"
+          },
+          fontFamily: {
+            "label-md": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-lg-mobile": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "mono-num": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "500" }],
+            "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "500" }],
+            "body-sm": ["13px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "400" }],
+            "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }],
+            "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "mono-num": ["14px", { lineHeight: "20px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "display": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      body {
+        overscroll-behavior-y: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      main > :first-child {
+        margin-top: 0 !important;
+      }
+      main > :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Mobile frame centering for large desktop screens */
+    @media (min-width: 640px) {
+      .app-wrapper {
+        max-width: 480px;
+        margin: 0 auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        min-height: 100vh;
+        position: relative;
+        background: #faf8ff;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 sm:bg-slate-200 text-on-surface antialiased flex flex-col min-h-screen">
+
+  <div class="app-wrapper flex flex-col flex-1 min-h-screen w-full bg-background relative overflow-x-hidden">
+
+    <!-- Top Sticky Header -->
+    <header class="fixed sm:absolute top-0 inset-x-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe">
+      <div class="h-16 px-margin-mobile flex items-center justify-between gap-space-sm">
+        <div class="flex items-center gap-space-sm min-w-0">
+          <img alt="WorkEase Logo" class="h-8 w-auto object-contain flex-shrink-0 cursor-pointer" onclick="switchTab('dashboard')" src="https://lh3.googleusercontent.com/aida/AEtjO1XMaXrJLo9KWdQRUwbT-PzvZDV53p6bfQpvTWt3k4nybTvcX1aKC1fSSAEDJ_nCjLWvcd8iuRpapkEj6VJC-dl7MHMMHsExEDWNwcgyZM06H3ljC0rlASDnJENbtMy0sfScV7JUK6e7T_WVwvw-dpXQHwmdNpd_8g0rohviaJ39Qkh6bzjw1SXYgr37fbCxsOLyNfhkfQ0UbJ-syjA2x08zd06tDvNZQ8OfEBsfC73NThlfYuu-V5RY"/>
+          <div class="flex flex-col min-w-0">
+            <div class="flex items-center gap-1">
+              <span class="font-headline-sm text-headline-sm text-on-surface truncate cursor-pointer" onclick="switchTab('dashboard')">WorkEase</span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-normal hidden sm:inline">•</span>
+              <span id="header-page-title" class="font-label-sm text-label-sm text-primary font-semibold hidden sm:inline">Dashboard</span>
+            </div>
+            <button onclick="toggleSubsidiaryModal()" class="flex items-center gap-1 text-left min-w-0 h-5 group">
+              <span id="current-entity" class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors truncate max-w-[130px]">Acme Corp France</span>
+              <span class="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:text-primary transition-colors">expand_more</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center gap-space-xs flex-shrink-0">
+          <button aria-label="Notifications" onclick="toggleNotificationsModal()" class="relative w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors">
+            <span class="material-symbols-outlined text-[24px]">notifications</span>
+            <span id="badge-notif-count" class="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 bg-primary text-on-primary font-label-sm text-[10px] leading-tight flex items-center justify-center rounded-full shadow-sm">3</span>
+          </button>
+          <button aria-label="Profil utilisateur" onclick="toggleProfileModal()" class="w-11 h-11 flex items-center justify-center rounded-full hover:opacity-90 transition-opacity">
+            <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfs69EYJoYYo0WY_-PfUXD-NZk2vGqbOEE6UvzOOlNJX4jN0YiolpHXoKRqDCsjnUd8BdkJIqreHluG7mYenPbcK3A1HXpZjLaL8s2dSSkvYMdzYrKZvx7BqfZKfKlTfBViiu8mLiF1NK5EyqMMrFmGWoZCRXNHbkCv9TGiBXnfkaDkvS9qAkKlysokP4GCTwOf5QM3rWKsLOe9KygPqmwbPb-i2vtEv_seeFZ2N2dWCLSmRTEuXH"/>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area with Dynamic Views -->
+    <main class="flex-1 flex flex-col relative w-full px-margin-mobile pt-16 pb-20 bg-background">
+
+      <!-- ================= TAB 1: DASHBOARD ================= -->
+      <section id="tab-dashboard" class="tab-view flex flex-col w-full pb-6 space-y-4">
+        
+        <!-- Salutation & Quick Actions Header -->
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3 mt-3">
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface flex items-center gap-1.5">
+                Bonjour Sophie <span class="inline-block animate-bounce text-xl">👋</span>
+              </h1>
+              <p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+                <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Espace Manager &amp; RH • <span id="kpi-banner-count">6</span> demandes en attente
+              </p>
+            </div>
+            <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-surface-container-high text-primary">
+              <span class="material-symbols-outlined text-[24px]">verified_user</span>
+            </div>
+          </div>
+
+          <!-- Quick filter pill bar -->
+          <div class="flex items-center gap-2 pt-1 overflow-x-auto no-scrollbar">
+            <button onclick="triggerExportReport()" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-on-primary rounded-full font-label-md text-label-md shadow-sm active:scale-95 transition-transform flex-shrink-0">
+              <span class="material-symbols-outlined text-[16px]">file_download</span>
+              <span>Exporter le rapport</span>
+            </button>
+            <button onclick="switchTab('demandes')" class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container text-on-surface rounded-full font-label-md text-label-md active:scale-95 transition-transform flex-shrink-0">
+              <span class="material-symbols-outlined text-[16px]">filter_list</span>
+              <span>Toutes les demandes</span>
+            </button>
+            <button onclick="switchTab('planning')" class="flex items-center gap-1.5 px-2.5 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-label-md text-label-md active:scale-95 transition-transform flex-shrink-0">
+              <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+              <span>Planning</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Cards Grid (2x2) -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- KPI 1: En attente -->
+          <div onclick="switchTab('demandes')" class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-2 cursor-pointer hover:ring-1 hover:ring-primary/20 transition-all">
+            <div class="flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">À valider</span>
+              <span class="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-[10px] font-semibold">2 urgents</span>
+            </div>
+            <div>
+              <div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold flex items-baseline gap-1">
+                <span id="kpi-count-card">6</span> <span class="font-label-md text-label-md text-on-surface-variant font-normal">demandes</span>
+              </div>
+              <p class="font-label-sm text-label-sm text-amber-700 flex items-center gap-0.5 mt-0.5">
+                <span class="material-symbols-outlined text-[13px]">alarm</span>
+                Délai moyen: 4h
+              </p>
+            </div>
+          </div>
+
+          <!-- KPI 2: Absents aujourd'hui -->
+          <div onclick="switchTab('planning')" class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-2 cursor-pointer hover:ring-1 hover:ring-primary/20 transition-all">
+            <div class="flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Absents auj.</span>
+              <span class="w-2 h-2 rounded-full bg-primary-container"></span>
+            </div>
+            <div>
+              <div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold flex items-baseline gap-1">
+                4 <span class="font-label-md text-label-md text-on-surface-variant font-normal">/ 32 actifs</span>
+              </div>
+              <div class="flex -space-x-1.5 mt-1.5">
+                <img class="w-5 h-5 rounded-full object-cover" data-alt="Portrait professionnel cadre" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzcmbTmJ0xyjGSO1RuHX9XeVQrQbms-mtcdB89oFRxM0ONDl_xXc8lQeuHdnyrzpdvYK7lKOin_KUdNJg3Y3aMqev2YIAMYpP4tXlPDnnETFT1lT6fNZUq4dnHMgXWrMfQqMmFJfAhjaraGjP6xdx9coBpR61udoOvQPEeBv00njKgt1j9Vsr63Dd7cVvtZtXUbWSr9-aIxj9cSrf7Df5PZxlmsDR75Ie8FhHvRHPuQzhjADRt5hKX"/>
+                <img class="w-5 h-5 rounded-full object-cover" data-alt="Portrait jeune employée" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZOyiqGm_V0xWyhesbyCeUTVA2VqlwZNlqrFgDk1RJxAxTLIIT3zE3dxsA4Z7qlbdZmYEXu4e6SSCQUgtzVVsFsmoSdFJKfZL_af-hPM7wgFeJEbFnlDogB0NjgUZ7tpcC79W1O1KE5k2Dw6H4yBtJ-bJg8am9SnlN6-NH4fCrb0klM3AJlOxbIJLboly252ZtOi25woAxYVsd-_UIIMXe7w0vQgHYSBsndD1a9nEl_-_XbuGfhF_"/>
+                <img class="w-5 h-5 rounded-full object-cover" data-alt="Portrait développeur" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzUm253PVJQGNXfV4yA3bvs7IoB3XYeCiFku-wb3dk1dIbdA5gK1FEPCaIEx_GOOeQXG6qJwrOQVzYRyTMsjisaeTGw1qWU5XnwfhUxS1VBt_ujf4PKSfBz_JT8uuLLRhnSIVEAbtPspmfjsOEglhKETeNsA-njtKfU0slEUWJker8gubC7oAnTHYZ1x2ZNVSbcs0O1QidUzr07rbAaIEC5UXSqaPTfc91pKYSjmVy9WuqolzxakJ4"/>
+                <span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-[9px] flex items-center justify-center font-bold">+1</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 3: Solde équipe consommé -->
+          <div class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Solde consommé</span>
+              <span class="material-symbols-outlined text-primary text-[18px]">timelapse</span>
+            </div>
+            <div>
+              <div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold">68%</div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden mt-1.5">
+                <div class="bg-primary h-full rounded-full w-[68%]"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 4: Taux d'approbation -->
+          <div class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Taux d'accord</span>
+              <span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+            </div>
+            <div>
+              <div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold">94%</div>
+              <p class="font-label-sm text-label-sm text-primary flex items-center gap-0.5 mt-0.5">
+                <span class="material-symbols-outlined text-[13px]">trending_up</span>
+                +3.2% vs M-1
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Priority Requests Section -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-2">
+              <h2 class="font-headline-sm text-headline-sm text-on-surface">À valider en priorité</h2>
+              <span id="priority-badge-count" class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold">3</span>
+            </div>
+            <button onclick="switchTab('demandes')" class="font-label-sm text-label-sm text-primary font-medium flex items-center hover:underline">
+              Tout voir <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- Interactive Card 1: Thomas Leroy -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm transition-all duration-300 space-y-3" id="request-card-1">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative">
+                  <img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait Lead Développeur" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7"/>
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Thomas Leroy</h3>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">Lead Dev</span>
+                  </div>
+                  <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Vacances de printemps • Impact faible</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-label-sm text-label-sm flex-shrink-0 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                Congés Payés
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between text-on-surface">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+                <span class="font-mono-num text-mono-num font-semibold">14 - 18 Mai 2025</span>
+              </div>
+              <div class="font-label-md text-label-md px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">
+                5 jours
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+              <button class="flex-1 h-10 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-emerald-800 transition-all shadow-sm" onclick="handleAction('request-card-1', 'approuvée')">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                Approuver
+              </button>
+              <button class="flex-1 h-10 bg-surface-container-high text-error rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-red-100 transition-all" onclick="handleAction('request-card-1', 'refusée')">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Refuser
+              </button>
+              <button onclick="showDetailModal('Thomas Leroy', 'Congés Payés', '14 - 18 Mai 2025 (5 jours)', 'Vacances scolaires de printemps. Le projet Core API sera relayé par Lucas Martin.', '21 jours restants')" class="w-10 h-10 bg-surface-container-low text-on-surface-variant rounded-xl flex items-center justify-center flex-shrink-0 active:scale-95 hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Card 2: Camille Bernard -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm transition-all duration-300 space-y-3" id="request-card-2">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative">
+                  <img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait Designer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA"/>
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Camille Bernard</h3>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">Product Designer</span>
+                  </div>
+                  <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Pont de l'Ascension • Sprint final</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-primary font-label-sm text-label-sm flex-shrink-0 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                RTT
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between text-on-surface">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">event_note</span>
+                <span class="font-mono-num text-mono-num font-semibold">10 Mai 2025</span>
+              </div>
+              <div class="font-label-md text-label-md px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">
+                1 jour
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+              <button class="flex-1 h-10 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-emerald-800 transition-all shadow-sm" onclick="handleAction('request-card-2', 'approuvée')">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                Approuver
+              </button>
+              <button class="flex-1 h-10 bg-surface-container-high text-error rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-red-100 transition-all" onclick="handleAction('request-card-2', 'refusée')">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Refuser
+              </button>
+              <button onclick="showDetailModal('Camille Bernard', 'RTT', '10 Mai 2025 (1 jour)', 'Journée de récupération accordée sur le pont de mai. Maquettes Figma finalisées.', '4 jours RTT restants')" class="w-10 h-10 bg-surface-container-low text-on-surface-variant rounded-xl flex items-center justify-center flex-shrink-0 active:scale-95 hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Card 3: Lucas Martin -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm transition-all duration-300 space-y-3" id="request-card-3">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative">
+                  <img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait Responsable Marketing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i"/>
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Lucas Martin</h3>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">Growth Mktg</span>
+                  </div>
+                  <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Projet associatif • Remplacement ok</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 font-label-sm text-label-sm flex-shrink-0 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                Sans Solde
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between text-on-surface">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">date_range</span>
+                <span class="font-mono-num text-mono-num font-semibold">02 - 04 Juin 2025</span>
+              </div>
+              <div class="font-label-md text-label-md px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">
+                3 jours
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+              <button class="flex-1 h-10 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-emerald-800 transition-all shadow-sm" onclick="handleAction('request-card-3', 'approuvée')">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                Approuver
+              </button>
+              <button class="flex-1 h-10 bg-surface-container-high text-error rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 hover:bg-red-100 transition-all" onclick="handleAction('request-card-3', 'refusée')">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Refuser
+              </button>
+              <button onclick="showDetailModal('Lucas Martin', 'Congé Sans Solde', '02 - 04 Juin 2025 (3 jours)', 'Participation à un séminaire bénévole d\'entraide technologique. Campagnes automatisées.', 'Convention d\'accord signée')" class="w-10 h-10 bg-surface-container-low text-on-surface-variant rounded-xl flex items-center justify-center flex-shrink-0 active:scale-95 hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Team Schedule / Planning Snippet -->
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-headline-sm text-headline-sm text-on-surface">Planning de la semaine</h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Équipe Produit &amp; Tech (4 pers.)</p>
+            </div>
+            <button onclick="switchTab('planning')" class="font-label-sm text-label-sm text-primary font-semibold px-2 py-1 bg-surface-container rounded-lg hover:bg-surface-container-high transition-colors">Sem. 20</button>
+          </div>
+          
+          <!-- Days Grid Header -->
+          <div class="grid grid-cols-5 gap-1.5 text-center font-label-sm text-label-sm text-on-surface-variant pt-1">
+            <div class="py-1">Lun 12</div>
+            <div class="py-1">Mar 13</div>
+            <div class="py-1 bg-surface-container-high text-primary rounded-lg font-bold">Mer 14</div>
+            <div class="py-1">Jeu 15</div>
+            <div class="py-1">Ven 16</div>
+          </div>
+
+          <!-- Team Members Presence Rows -->
+          <div class="space-y-2 pt-1">
+            <!-- Person 1: Sophie (Manager) -->
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-label-sm text-on-surface w-14 truncate font-medium">Sophie</span>
+              <div class="grid grid-cols-5 gap-1.5 flex-1">
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold" title="Présentiel">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold" title="Présentiel">P</div>
+                <div class="h-6 rounded bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 font-bold" title="Télétravail">TT</div>
+                <div class="h-6 rounded bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 font-bold" title="Télétravail">TT</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold" title="Présentiel">P</div>
+              </div>
+            </div>
+            <!-- Person 2: Thomas Leroy -->
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-label-sm text-on-surface w-14 truncate font-medium">Thomas</span>
+              <div class="grid grid-cols-5 gap-1.5 flex-1">
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-amber-100 flex items-center justify-center text-[10px] text-amber-800 font-bold" title="Congé demandé">CP*</div>
+                <div class="h-6 rounded bg-amber-100 flex items-center justify-center text-[10px] text-amber-800 font-bold" title="Congé demandé">CP*</div>
+                <div class="h-6 rounded bg-amber-100 flex items-center justify-center text-[10px] text-amber-800 font-bold" title="Congé demandé">CP*</div>
+              </div>
+            </div>
+            <!-- Person 3: Camille Bernard -->
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-label-sm text-on-surface w-14 truncate font-medium">Camille</span>
+              <div class="grid grid-cols-5 gap-1.5 flex-1">
+                <div class="h-6 rounded bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 font-bold">TT</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 font-bold">TT</div>
+              </div>
+            </div>
+            <!-- Person 4: Lucas Martin -->
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-label-sm text-on-surface w-14 truncate font-medium">Lucas</span>
+              <div class="grid grid-cols-5 gap-1.5 flex-1">
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+                <div class="h-6 rounded bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 font-bold">TT</div>
+                <div class="h-6 rounded bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-800 font-bold">P</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex items-center justify-center gap-3 pt-2 text-[11px] text-on-surface-variant font-label-sm">
+            <div class="flex items-center gap-1">
+              <span class="w-2.5 h-2.5 rounded bg-emerald-100"></span> Présentiel
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="w-2.5 h-2.5 rounded bg-blue-100"></span> Télétravail
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="w-2.5 h-2.5 rounded bg-amber-100"></span> En attente
+            </div>
+          </div>
+        </div>
+
+        <!-- Absence Types Breakdown & Analytics -->
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface">Répartition du mois</h2>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Mai 2025</span>
+          </div>
+
+          <!-- Segmented Visual Bar -->
+          <div class="w-full h-3 rounded-full overflow-hidden flex bg-surface-container">
+            <div class="bg-primary h-full transition-all" style="width: 62%" title="Congés payés (62%)"></div>
+            <div class="bg-secondary-container h-full transition-all" style="width: 24%" title="RTT (24%)"></div>
+            <div class="bg-error-container h-full transition-all" style="width: 14%" title="Maladie (14%)"></div>
+          </div>
+
+          <!-- Breakdown Legend with figures -->
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <div class="bg-surface-container-low rounded-xl p-2.5 text-center">
+              <div class="flex items-center justify-center gap-1 text-primary">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                <span class="font-label-sm text-label-sm font-semibold">62%</span>
+              </div>
+              <p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">Congés payés</p>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 text-center">
+              <div class="flex items-center justify-center gap-1 text-secondary">
+                <span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+                <span class="font-label-sm text-label-sm font-semibold">24%</span>
+              </div>
+              <p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">RTT</p>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 text-center">
+              <div class="flex items-center justify-center gap-1 text-error">
+                <span class="w-2 h-2 rounded-full bg-error"></span>
+                <span class="font-label-sm text-label-sm font-semibold">14%</span>
+              </div>
+              <p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">Maladie</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operational Links & Settings -->
+        <div class="bg-surface-container-lowest rounded-2xl p-2 shadow-sm space-y-1">
+          <button onclick="showToast('Historique des 12 derniers mois synchronisé avec la paie.')" class="w-full text-left flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low active:bg-surface-container transition-colors group">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-surface-container-high text-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">history</span>
+              </div>
+              <div>
+                <div class="font-label-lg text-label-lg text-on-surface font-semibold">Historique complet des approbations</div>
+                <div class="font-body-sm text-body-sm text-on-surface-variant">Archivage et traçabilité légale</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+          </button>
+          
+          <button onclick="showToast('Politique RH : Convention Syntec - 25 CP + 10 RTT/an.')" class="w-full text-left flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low active:bg-surface-container transition-colors group">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-surface-container-high text-secondary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+              </div>
+              <div>
+                <div class="font-label-lg text-label-lg text-on-surface font-semibold">Paramètres de politique RH</div>
+                <div class="font-body-sm text-body-sm text-on-surface-variant">Quotas conventionnels &amp; règles d'équipe</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 2: DEMANDES (ALL REQUESTS) ================= -->
+      <section id="tab-demandes" class="tab-view hidden flex-col w-full pb-6 space-y-4">
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3 mt-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold">Demandes d'absence</h1>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Gérer et arbitrer les congés de l'équipe</p>
+            </div>
+            <button onclick="filterDemandes('all')" class="p-2 rounded-xl bg-surface-container text-primary">
+              <span class="material-symbols-outlined text-[20px]">refresh</span>
+            </button>
+          </div>
+
+          <!-- Search input -->
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+            <input id="search-input" oninput="handleSearch(this.value)" type="text" placeholder="Rechercher par nom, type ou date..." class="w-full bg-surface-container-low rounded-xl pl-10 pr-4 py-2.5 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20">
+          </div>
+
+          <!-- Filter tags -->
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
+            <button onclick="filterDemandes('all')" class="filter-chip active-filter px-3 py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary font-medium flex-shrink-0 transition-colors">Toutes (<span id="count-all">6</span>)</button>
+            <button onclick="filterDemandes('cp')" class="filter-chip px-3 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface font-medium flex-shrink-0 transition-colors">Congés Payés</button>
+            <button onclick="filterDemandes('rtt')" class="filter-chip px-3 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface font-medium flex-shrink-0 transition-colors">RTT</button>
+            <button onclick="filterDemandes('sans-solde')" class="filter-chip px-3 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface font-medium flex-shrink-0 transition-colors">Sans Solde</button>
+          </div>
+        </div>
+
+        <!-- Demandes List -->
+        <div id="demandes-list" class="space-y-3">
+          <!-- Additional Request 4: Sarah Alami -->
+          <div class="demande-item bg-surface-container-lowest rounded-2xl p-space-md shadow-sm transition-all duration-300 space-y-3" id="request-card-4" data-type="cp" data-name="sarah alami">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative">
+                  <img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZOyiqGm_V0xWyhesbyCeUTVA2VqlwZNlqrFgDk1RJxAxTLIIT3zE3dxsA4Z7qlbdZmYEXu4e6SSCQUgtzVVsFsmoSdFJKfZL_af-hPM7wgFeJEbFnlDogB0NjgUZ7tpcC79W1O1KE5k2Dw6H4yBtJ-bJg8am9SnlN6-NH4fCrb0klM3AJlOxbIJLboly252ZtOi25woAxYVsd-_UIIMXe7w0vQgHYSBsndD1a9nEl_-_XbuGfhF_"/>
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Sarah Alami</h3>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">Dev Frontend</span>
+                  </div>
+                  <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Pont de la Pentecôte</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-label-sm text-label-sm flex-shrink-0 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                Congés Payés
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between text-on-surface">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+                <span class="font-mono-num text-mono-num font-semibold">09 - 13 Juin 2025</span>
+              </div>
+              <div class="font-label-md text-label-md px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">
+                4 jours
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+              <button class="flex-1 h-10 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 transition-all shadow-sm" onclick="handleAction('request-card-4', 'approuvée')">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                Approuver
+              </button>
+              <button class="flex-1 h-10 bg-surface-container-high text-error rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 transition-all" onclick="handleAction('request-card-4', 'refusée')">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Refuser
+              </button>
+            </div>
+          </div>
+
+          <!-- Additional Request 5: Marc Dupuis -->
+          <div class="demande-item bg-surface-container-lowest rounded-2xl p-space-md shadow-sm transition-all duration-300 space-y-3" id="request-card-5" data-type="rtt" data-name="marc dupuis">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative">
+                  <img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait Marc" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzcmbTmJ0xyjGSO1RuHX9XeVQrQbms-mtcdB89oFRxM0ONDl_xXc8lQeuHdnyrzpdvYK7lKOin_KUdNJg3Y3aMqev2YIAMYpP4tXlPDnnETFT1lT6fNZUq4dnHMgXWrMfQqMmFJfAhjaraGjP6xdx9coBpR61udoOvQPEeBv00njKgt1j9Vsr63Dd7cVvtZtXUbWSr9-aIxj9cSrf7Df5PZxlmsDR75Ie8FhHvRHPuQzhjADRt5hKX"/>
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Marc Dupuis</h3>
+                    <span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">Dev Backend</span>
+                  </div>
+                  <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Vendredi prolongé</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-primary font-label-sm text-label-sm flex-shrink-0 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                RTT
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between text-on-surface">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">event_note</span>
+                <span class="font-mono-num text-mono-num font-semibold">23 Mai 2025</span>
+              </div>
+              <div class="font-label-md text-label-md px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">
+                1 jour
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+              <button class="flex-1 h-10 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 transition-all shadow-sm" onclick="handleAction('request-card-5', 'approuvée')">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                Approuver
+              </button>
+              <button class="flex-1 h-10 bg-surface-container-high text-error rounded-xl font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 transition-all" onclick="handleAction('request-card-5', 'refusée')">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Refuser
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: PLANNING ================= -->
+      <section id="tab-planning" class="tab-view hidden flex-col w-full pb-6 space-y-4">
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3 mt-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold">Planning Équipe</h1>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Vue globale des présences &amp; congés</p>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="changeWeek(-1)" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high">
+                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+              </button>
+              <span id="current-week-label" class="font-label-sm text-label-sm font-semibold text-primary px-2 py-1 bg-surface-container rounded-lg">Sem. 20</span>
+              <button onclick="changeWeek(1)" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high">
+                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Days of Week with dynamic active status -->
+          <div class="grid grid-cols-5 gap-1.5 text-center font-label-sm text-label-sm text-on-surface-variant pt-1">
+            <div class="py-2 rounded-xl bg-surface-container-low font-medium">Lun<br><span class="text-xs text-on-surface font-semibold">12</span></div>
+            <div class="py-2 rounded-xl bg-surface-container-low font-medium">Mar<br><span class="text-xs text-on-surface font-semibold">13</span></div>
+            <div class="py-2 rounded-xl bg-primary text-on-primary font-bold shadow-sm">Mer<br><span class="text-xs">14</span></div>
+            <div class="py-2 rounded-xl bg-surface-container-low font-medium">Jeu<br><span class="text-xs text-on-surface font-semibold">15</span></div>
+            <div class="py-2 rounded-xl bg-surface-container-low font-medium">Ven<br><span class="text-xs text-on-surface font-semibold">16</span></div>
+          </div>
+        </div>
+
+        <!-- Team Calendar Matrix -->
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-4">
+          <h2 class="font-headline-sm text-headline-sm text-on-surface">Présences détaillées</h2>
+          
+          <div class="space-y-3">
+            <!-- Sophie -->
+            <div class="p-3 bg-surface-container-low rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span class="font-label-md text-label-md font-semibold text-on-surface">Sophie Laurent (Manager)</span>
+                </div>
+                <span class="text-xs text-primary font-semibold">3P / 2TT</span>
+              </div>
+              <div class="grid grid-cols-5 gap-1.5">
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-900">TT</div>
+                <div class="h-8 rounded-lg bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-900">TT</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+              </div>
+            </div>
+
+            <!-- Thomas -->
+            <div class="p-3 bg-surface-container-low rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  <span class="font-label-md text-label-md font-semibold text-on-surface">Thomas Leroy (Lead Dev)</span>
+                </div>
+                <span class="text-xs text-amber-700 font-semibold">2P / 3CP</span>
+              </div>
+              <div class="grid grid-cols-5 gap-1.5">
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-900">CP</div>
+                <div class="h-8 rounded-lg bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-900">CP</div>
+                <div class="h-8 rounded-lg bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-900">CP</div>
+              </div>
+            </div>
+
+            <!-- Camille -->
+            <div class="p-3 bg-surface-container-low rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span class="font-label-md text-label-md font-semibold text-on-surface">Camille Bernard (Design)</span>
+                </div>
+                <span class="text-xs text-blue-700 font-semibold">3P / 2TT</span>
+              </div>
+              <div class="grid grid-cols-5 gap-1.5">
+                <div class="h-8 rounded-lg bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-900">TT</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-900">TT</div>
+              </div>
+            </div>
+
+            <!-- Lucas -->
+            <div class="p-3 bg-surface-container-low rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span class="font-label-md text-label-md font-semibold text-on-surface">Lucas Martin (Marketing)</span>
+                </div>
+                <span class="text-xs text-primary font-semibold">4P / 1TT</span>
+              </div>
+              <div class="grid grid-cols-5 gap-1.5">
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+                <div class="h-8 rounded-lg bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-900">TT</div>
+                <div class="h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-xs font-bold text-emerald-900">P</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: ÉQUIPE ================= -->
+      <section id="tab-equipe" class="tab-view hidden flex-col w-full pb-6 space-y-4">
+        <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3 mt-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold">Membres de l'équipe</h1>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">4 collaborateurs directs • Tech &amp; Produit</p>
+            </div>
+            <button onclick="showToast('Option d\'ajout de membre réservée aux Administrateurs RH.')" class="p-2 rounded-xl bg-primary text-on-primary">
+              <span class="material-symbols-outlined text-[20px]">person_add</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Member 1: Thomas Leroy -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdUnUBeKzziC8SqbOK8cn9gp1wD8GqY6ISGWQxVf7iNdv0LzvTriXDixvjOVZ1SPAQVnccsycFleTxbk2P08-L4XAfBrxjJK-FqwjpLjbJ6xIyX7F4fWv56fizXpzcwC31qe5WituZMHvtq7oHpSImBAQCgBzq8S4TG8s5m67iZ65TIFFDpPRNeMztukebpdOxlzc04BegXt6znYgbAN0ADOwT4SqdeTpte7i0dSuB60CzTWqAbV7"/>
+                <div>
+                  <h3 class="font-label-lg font-semibold text-on-surface">Thomas Leroy</h3>
+                  <p class="text-xs text-on-surface-variant">Lead Développeur Fullstack</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Présent</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-surface-container">
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde CP restant</span>
+                <span class="font-mono-num font-bold text-sm text-primary">21 jours</span>
+              </div>
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde RTT</span>
+                <span class="font-mono-num font-bold text-sm text-secondary">6 jours</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member 2: Camille Bernard -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZCTvaaIflGqDE3AOxXmzuAdyzGbjodu51bIsLx-gjPfjsTHj64U71jOZayEIBF1TdSNlUCaP2hE40YduxbQBueirzLFISv89GkJq1Ar07jrTTs3PSun_Bc8CX8FVU7oYi4v8rR6k-ZY-CWlsfPgMOk-zxBIfWMfDNtSuLhFVMrjoPviTlLAYVgmNN0KEXn5Y3kNVaMZ8H4LRDF0DVJ1NGxfR55T8muB8ue6Mgo9uB8yaphbZBHJtA"/>
+                <div>
+                  <h3 class="font-label-lg font-semibold text-on-surface">Camille Bernard</h3>
+                  <p class="text-xs text-on-surface-variant">Lead Product Designer</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">Télétravail</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-surface-container">
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde CP restant</span>
+                <span class="font-mono-num font-bold text-sm text-primary">17 jours</span>
+              </div>
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde RTT</span>
+                <span class="font-mono-num font-bold text-sm text-secondary">4 jours</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member 3: Lucas Martin -->
+          <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BmGJyVHsjv0tCHOyLqALAcnqmihmXBu5f49dr8SQTg1Qzw8Mhx6Hlt-f04cFoyt-NtQoYSjcC_DxtYwmsk1JG0ADd8h7L7aL9tlQQgfq127ifvvRZfqKL3Ic6qPfX1bfVTRrHhQJeqcioQQOjrfU80qauQKsPXtfftPdV9rwmdGEGVKn249bAK3KZTVqhcMqmd0eRnggdrxV7H4R1jarQirEVinmNMEDat4exEj8vzXQBJkgF48i"/>
+                <div>
+                  <h3 class="font-label-lg font-semibold text-on-surface">Lucas Martin</h3>
+                  <p class="text-xs text-on-surface-variant">Growth Marketing Manager</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Présent</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-surface-container">
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde CP restant</span>
+                <span class="font-mono-num font-bold text-sm text-primary">14.5 jours</span>
+              </div>
+              <div class="text-center p-2 rounded-xl bg-surface-container-low">
+                <span class="text-xs text-on-surface-variant block">Solde RTT</span>
+                <span class="font-mono-num font-bold text-sm text-secondary">3 jours</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed sm:absolute bottom-0 inset-x-0 z-50 pb-safe bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold">
+      <div class="flex justify-around items-center h-16 px-space-xs">
+        <a id="nav-btn-dashboard" onclick="switchTab('dashboard')" aria-current="page" class="nav-item flex flex-col items-center justify-center w-16 h-14 transition-colors gap-0.5 text-primary font-semibold cursor-pointer" data-path="dashboard" href="javascript:void(0)">
+          <span class="material-symbols-outlined text-[22px]">dashboard</span>
+          <span class="font-label-sm text-[11px]">Dashboard</span>
+        </a>
+        <a id="nav-btn-demandes" onclick="switchTab('demandes')" class="nav-item flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant hover:text-on-surface transition-colors gap-0.5 cursor-pointer" data-path="demandes" href="javascript:void(0)">
+          <span class="material-symbols-outlined text-[22px]">event_available</span>
+          <span class="font-label-sm text-[11px]">Demandes</span>
+        </a>
+        <a id="nav-btn-planning" onclick="switchTab('planning')" class="nav-item flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant hover:text-on-surface transition-colors gap-0.5 cursor-pointer" data-path="planning" href="javascript:void(0)">
+          <span class="material-symbols-outlined text-[22px]">calendar_month</span>
+          <span class="font-label-sm text-[11px]">Planning</span>
+        </a>
+        <a id="nav-btn-equipe" onclick="switchTab('equipe')" class="nav-item flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant hover:text-on-surface transition-colors gap-0.5 cursor-pointer" data-path="equipe" href="javascript:void(0)">
+          <span class="material-symbols-outlined text-[22px]">group</span>
+          <span class="font-label-sm text-[11px]">Équipe</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ================= MODALS & DRAWERS ================= -->
+
+    <!-- Notifications Drawer Modal -->
+    <div id="modal-notifications" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-end sm:items-center justify-center transition-opacity" onclick="if(event.target === this) toggleNotificationsModal()">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4 max-h-[80vh] flex flex-col">
+        <div class="flex items-center justify-between border-b pb-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">notifications</span>
+            <h3 class="font-headline-sm font-semibold text-on-surface">Notifications (3)</h3>
+          </div>
+          <button onclick="toggleNotificationsModal()" class="text-on-surface-variant hover:text-on-surface">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="space-y-3 overflow-y-auto pr-1">
+          <div class="p-3 bg-surface-container-low rounded-xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-amber-600 mt-0.5">priority_high</span>
+            <div>
+              <p class="font-label-md font-semibold text-on-surface">Demande urgente : Thomas Leroy</p>
+              <p class="text-xs text-on-surface-variant">Congés payés du 14 au 18 Mai en attente d'approbation depuis 2h.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-surface-container-low rounded-xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-primary mt-0.5">calendar_month</span>
+            <div>
+              <p class="font-label-md font-semibold text-on-surface">Rappel : Pont de l'Ascension</p>
+              <p class="text-xs text-on-surface-variant">3 membres de votre équipe seront absents le 10 Mai.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-surface-container-low rounded-xl flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-600 mt-0.5">sync</span>
+            <div>
+              <p class="font-label-md font-semibold text-on-surface">Clôture des paies de Mai</p>
+              <p class="text-xs text-on-surface-variant">Toutes les absences doivent être validées avant le 25 Mai à 18h.</p>
+            </div>
+          </div>
+        </div>
+        <button onclick="toggleNotificationsModal(); showToast('Toutes les notifications sont marquées comme lues.'); document.getElementById('badge-notif-count').style.display='none';" class="w-full py-2.5 bg-surface-container text-on-surface rounded-xl font-label-md font-semibold">
+          Tout marquer comme lu
+        </button>
+      </div>
+    </div>
+
+    <!-- Subsidiary Switcher Modal -->
+    <div id="modal-subsidiary" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-end sm:items-center justify-center" onclick="if(event.target === this) toggleSubsidiaryModal()">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b pb-3">
+          <h3 class="font-headline-sm font-semibold text-on-surface">Changer d'entité</h3>
+          <button onclick="toggleSubsidiaryModal()" class="text-on-surface-variant">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="space-y-2">
+          <button onclick="selectSubsidiary('Acme Corp France')" class="w-full p-3 rounded-xl flex items-center justify-between bg-surface-container-low hover:bg-surface-container text-left">
+            <div class="font-medium text-on-surface">Acme Corp France (Siège)</div>
+            <span class="material-symbols-outlined text-primary">check</span>
+          </button>
+          <button onclick="selectSubsidiary('Acme Digital Studio')" class="w-full p-3 rounded-xl flex items-center justify-between hover:bg-surface-container-low text-left">
+            <div class="font-medium text-on-surface">Acme Digital Studio</div>
+          </button>
+          <button onclick="selectSubsidiary('Acme Logistics Nord')" class="w-full p-3 rounded-xl flex items-center justify-between hover:bg-surface-container-low text-left">
+            <div class="font-medium text-on-surface">Acme Logistics Nord</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Request Modal -->
+    <div id="modal-detail" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-end sm:items-center justify-center" onclick="if(event.target === this) closeDetailModal()">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b pb-3">
+          <div>
+            <h3 id="modal-detail-title" class="font-headline-sm font-semibold text-on-surface">Détails de la demande</h3>
+            <p id="modal-detail-subtitle" class="text-xs text-on-surface-variant">Informations de conformité RH</p>
+          </div>
+          <button onclick="closeDetailModal()" class="text-on-surface-variant">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="space-y-3">
+          <div class="p-3 bg-surface-container-low rounded-xl">
+            <span class="text-xs text-on-surface-variant block">Période demandée</span>
+            <span id="modal-detail-period" class="font-mono-num font-semibold text-sm text-on-surface">14 - 18 Mai 2025</span>
+          </div>
+          <div class="p-3 bg-surface-container-low rounded-xl">
+            <span class="text-xs text-on-surface-variant block">Motif &amp; Continuité de service</span>
+            <p id="modal-detail-reason" class="text-xs text-on-surface mt-1 leading-relaxed"></p>
+          </div>
+          <div class="p-3 bg-surface-container-low rounded-xl">
+            <span class="text-xs text-on-surface-variant block">Solde après déduction</span>
+            <span id="modal-detail-balance" class="font-mono-num font-semibold text-xs text-primary"></span>
+          </div>
+        </div>
+        <button onclick="closeDetailModal()" class="w-full py-2.5 bg-primary text-on-primary rounded-xl font-label-md font-semibold">
+          Fermer
+        </button>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="modal-profile" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-end sm:items-center justify-center" onclick="if(event.target === this) toggleProfileModal()">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center gap-3 border-b pb-4">
+          <img alt="Profile" class="w-14 h-14 rounded-full object-cover ring-4 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfs69EYJoYYo0WY_-PfUXD-NZk2vGqbOEE6UvzOOlNJX4jN0YiolpHXoKRqDCsjnUd8BdkJIqreHluG7mYenPbcK3A1HXpZjLaL8s2dSSkvYMdzYrKZvx7BqfZKfKlTfBViiu8mLiF1NK5EyqMMrFmGWoZCRXNHbkCv9TGiBXnfkaDkvS9qAkKlysokP4GCTwOf5QM3rWKsLOe9KygPqmwbPb-i2vtEv_seeFZ2N2dWCLSmRTEuXH"/>
+          <div>
+            <h3 class="font-headline-sm font-semibold text-on-surface">Sophie Laurent</h3>
+            <p class="text-xs text-on-surface-variant">Responsable RH &amp; Manager Équipe Tech</p>
+            <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">Compte Certifié</span>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <button onclick="showToast('Rôle : Administrateur RH avec droits d\'approbation niveau 2.')" class="w-full text-left p-3 rounded-xl hover:bg-surface-container-low flex items-center justify-between text-sm">
+            <span>Mes autorisations</span>
+            <span class="material-symbols-outlined text-[18px] text-on-surface-variant">verified_user</span>
+          </button>
+          <button onclick="showToast('Préférences de notification enregistrées.')" class="w-full text-left p-3 rounded-xl hover:bg-surface-container-low flex items-center justify-between text-sm">
+            <span>Préférences alertes e-mail / push</span>
+            <span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span>
+          </button>
+        </div>
+        <button onclick="toggleProfileModal()" class="w-full py-2.5 bg-surface-container text-on-surface rounded-xl font-label-md font-semibold">
+          Fermer
+        </button>
+      </div>
+    </div>
+
+    <!-- Floating Toast Notification -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2.5 rounded-2xl shadow-xl text-xs font-medium flex items-center gap-2 pointer-events-none opacity-0 transition-opacity duration-300 max-w-[90vw] text-center">
+      <span class="material-symbols-outlined text-primary-fixed text-[18px]">info</span>
+      <span id="toast-message">Action effectuée</span>
+    </div>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    let pendingCount = 6;
+    let priorityCount = 3;
+    let currentWeekNumber = 20;
+
+    // Action handler for approving / rejecting a request card
+    function handleAction(cardId, status) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+
+      // Tactile feedback animation
+      card.classList.add('scale-[0.98]', 'opacity-60');
+
+      setTimeout(() => {
+        card.innerHTML = `
+          <div class="flex items-center justify-between py-2 px-1 text-on-surface">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[22px] ${status === 'approuvée' ? 'text-primary' : 'text-error'}">
+                ${status === 'approuvée' ? 'check_circle' : 'cancel'}
+              </span>
+              <div>
+                <span class="font-label-md text-label-md font-semibold block">Demande ${status} avec succès</span>
+                <span class="text-[11px] text-on-surface-variant">Notification envoyée au collaborateur</span>
+              </div>
+            </div>
+            <button onclick="removeCard('${cardId}')" class="text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-black/5">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        `;
+        card.classList.remove('scale-[0.98]', 'opacity-60');
+        card.classList.add(status === 'approuvée' ? 'bg-emerald-50' : 'bg-red-50');
+        
+        // Update stats
+        if (pendingCount > 0) pendingCount--;
+        if (priorityCount > 0 && (cardId === 'request-card-1' || cardId === 'request-card-2' || cardId === 'request-card-3')) {
+          priorityCount--;
+        }
+        updateCounters();
+        showToast(`Demande #${cardId.replace('request-card-', '')} ${status} avec succès`);
+      }, 250);
+    }
+
+    function removeCard(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.remove(), 300);
+      }
+    }
+
+    function updateCounters() {
+      const banner = document.getElementById('kpi-banner-count');
+      const card = document.getElementById('kpi-count-card');
+      const prio = document.getElementById('priority-badge-count');
+      const allCount = document.getElementById('count-all');
+      
+      if (banner) banner.textContent = pendingCount;
+      if (card) card.textContent = pendingCount;
+      if (prio) prio.textContent = priorityCount;
+      if (allCount) allCount.textContent = pendingCount;
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(tab => {
+        tab.classList.add('hidden');
+      });
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+
+      // Update Nav buttons styling
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('text-primary', 'font-semibold');
+        btn.classList.add('text-on-surface-variant');
+      });
+      const activeBtn = document.getElementById(`nav-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-on-surface-variant');
+        activeBtn.classList.add('text-primary', 'font-semibold');
+      }
+
+      // Update Header title
+      const titleSpan = document.getElementById('header-page-title');
+      if (titleSpan) {
+        const map = {
+          dashboard: 'Dashboard',
+          demandes: 'Demandes',
+          planning: 'Planning',
+          equipe: 'Équipe'
+        };
+        titleSpan.textContent = map[tabId] || 'Dashboard';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal Helpers
+    function toggleNotificationsModal() {
+      const m = document.getElementById('modal-notifications');
+      m.classList.toggle('hidden');
+    }
+
+    function toggleSubsidiaryModal() {
+      const m = document.getElementById('modal-subsidiary');
+      m.classList.toggle('hidden');
+    }
+
+    function selectSubsidiary(name) {
+      document.getElementById('current-entity').textContent = name;
+      toggleSubsidiaryModal();
+      showToast(`Entité active : ${name}`);
+    }
+
+    function toggleProfileModal() {
+      const m = document.getElementById('modal-profile');
+      m.classList.toggle('hidden');
+    }
+
+    function showDetailModal(name, type, period, reason, balance) {
+      document.getElementById('modal-detail-title').textContent = `${name} • ${type}`;
+      document.getElementById('modal-detail-period').textContent = period;
+      document.getElementById('modal-detail-reason').textContent = reason;
+      document.getElementById('modal-detail-balance').textContent = balance;
+      document.getElementById('modal-detail').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('modal-detail').classList.add('hidden');
+    }
+
+    function triggerExportReport() {
+      showToast('Génération du rapport RH en cours... Téléchargement prêt.');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-message');
+      text.textContent = message;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 3000);
+    }
+
+    // Planning week switcher
+    function changeWeek(delta) {
+      currentWeekNumber += delta;
+      document.getElementById('current-week-label').textContent = `Sem. ${currentWeekNumber}`;
+      showToast(`Affichage du planning pour la semaine ${currentWeekNumber}`);
+    }
+
+    // Search and Filter for Demandes tab
+    function filterDemandes(type) {
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-on-primary');
+        btn.classList.add('bg-surface-container', 'text-on-surface');
+      });
+      event.target.classList.remove('bg-surface-container', 'text-on-surface');
+      event.target.classList.add('bg-primary', 'text-on-primary');
+
+      const items = document.querySelectorAll('.demande-item');
+      items.forEach(item => {
+        if (type === 'all' || item.getAttribute('data-type') === type) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    function handleSearch(query) {
+      const q = query.toLowerCase().trim();
+      const items = document.querySelectorAll('.demande-item');
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(q)) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
